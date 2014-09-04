@@ -1,0 +1,20 @@
+# Mac Files #
+*.DS_Store
+
+# Java Files #
+*.class
+*.jar
+*.war
+*.ear
+
+# Eclipse Files #
+.classpath
+.project
+.settings/*
+
+# Data Files #
+settings/*
+data/*
+
+# Ignored Files #
+*.ignore
