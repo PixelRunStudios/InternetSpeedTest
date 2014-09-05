@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class WebConnector {
-	
+	 
 	
 	/**
 	 * Gets the HTML representation of a webpage as a String
