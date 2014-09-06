@@ -19,3 +19,5 @@ data/*
 # Ignored Files #
 *.ignore
 /bin/
+
+scr/com/github/assisstion/MainFrame.java
