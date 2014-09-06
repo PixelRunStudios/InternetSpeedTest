@@ -9,13 +9,13 @@ public class RepetitionScheduler implements Runnable{
 	protected Runnable runnable;
 
 	public static void main(String[] args){
-		new Thread(new RepetitionScheduler(10000, 1000, new WebTimedProcess())).start();
+		new Thread(new RepetitionScheduler(10, 1000, new WebTimedProcess())).start();
 	}
 
-	public RepetitionScheduler(long timeFrame, long delay, Runnable runnable){
+	public RepetitionScheduler(long iterations, long delay, Runnable runnable){
 		this.delay = delay;
 		this.runnable = runnable;
-		iterations = timeFrame / delay;
+		this.iterations = iterations;
 	}
 
 	@Override
