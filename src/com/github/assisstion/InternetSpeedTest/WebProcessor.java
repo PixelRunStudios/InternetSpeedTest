@@ -12,12 +12,13 @@ import java.util.Map;
 
 import com.github.assisstion.Shared.Pair;
 
-public class WebProcessor implements InfoSender<Pair<Long, Long>>{
+public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>{
 
 
 	protected Map<String, String> data;
 
 	//Time in ms
+	protected int attemptCount = 0;
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
 	protected int success = 0;
@@ -28,6 +29,8 @@ public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 	public ArrayList<Long> bytes = new ArrayList<Long>();
 	public ArrayList<Long> time = new ArrayList<Long>();
 	public MainGUI gui;
+	private String currentName = "N/A";
+	private boolean processing = false;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -62,6 +65,9 @@ public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 
 
 	public void process(){
+		attemptCount = 0;
+		processing = false;
+		currentName = "N/A";
 		bytes.clear();
 		time.clear();
 		totalTime = 0;
@@ -157,6 +163,7 @@ public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 	}
 
 	public boolean processSite(String name, String website){
+		attemptCount++;
 		try{
 			if(!https){
 				if(!silent){
@@ -167,13 +174,17 @@ public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 				System.out.println(counter + (https ? "B" : "A") +
 						". Trying website: " + name);
 			}
+			currentName = name;
 			URL url = new URL(website);
-			HashSet<InfoSender<Pair<Long, Long>>> set = new HashSet<InfoSender<Pair<Long, Long>>>();
+			HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>> set = new HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>>();
 			set.add(this);
-			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set);
-			totalBytes += total.getValueOne();
-			totalTime += total.getValueTwo();
-
+			processing = true;
+			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set, attemptCount);
+			synchronized(this){
+				processing = false;
+				totalBytes += total.getValueOne();
+				totalTime += total.getValueTwo();
+			}
 
 			if(total.getValueOne() == 0){
 				return false;
@@ -198,11 +209,21 @@ public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 	}
 
 	@Override
-	public void send(Pair<Long, Long> info){
-		long bytes = totalBytes + info.getValueOne();
-		long time = totalTime + info.getValueTwo();
+	public void send(Pair<Pair<Long, Long>, Integer> infox){
+		if(attemptCount != infox.getValueTwo()){
+			return;
+		}
+		Pair<Long, Long> info = infox.getValueOne();
+		long bytes;
+		long time;
+		synchronized(this){
+			System.out.println(totalBytes + "+" + info.getValueOne());
+			bytes = totalBytes + info.getValueOne();
+			time = totalTime + info.getValueTwo();
+		}
+		gui.website.setText(currentName);
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
-		gui.speed.setText(String.valueOf((double) bytes / (double) time));
+		gui.cumulativeSpeed.setText(String.valueOf((double) bytes / (double) time));
 	}
 }

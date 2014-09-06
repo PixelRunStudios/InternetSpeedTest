@@ -46,8 +46,8 @@ public class WebConnector {
 	 * @throws IOException when the webpage cannot be connected to
 	 */
 	public static Pair<Long, Long> webpageByteCount(URL url, boolean silent, MainGUI gui,
-			Collection<InfoSender<Pair<Long, Long>>> senders) throws IOException{
-		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui, senders );
+			Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount) throws IOException{
+		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui, senders, attemptCount);
 		wbc.execute();
 		try{
 			return wbc.get();
@@ -59,20 +59,22 @@ public class WebConnector {
 
 	public static class WebpageByteCount extends SwingWorker<Pair<Long, Long>, Pair<Long, Long>>{
 
+		protected int attemptCount;
 		protected URL url;
 		protected boolean silent;
 		protected MainGUI gui;
-		protected Collection<InfoSender<Pair<Long, Long>>> senders;
+		protected Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders;
 
 		private long count;
 		private long startTime;
 
 		public WebpageByteCount(URL url, boolean silent, MainGUI gui,
-				Collection<InfoSender<Pair<Long, Long>>> senders){
+				Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount){
 			this.url = url;
 			this.silent = silent;
 			this.gui = gui;
 			this.senders = senders;
+			this.attemptCount = attemptCount;
 		}
 
 		@Override
@@ -116,9 +118,9 @@ public class WebConnector {
 			long time = pair.getValueTwo() - startTime;
 			gui.siteKB.setText(String.valueOf(bytes / 1000));
 			gui.siteTime.setText(String.valueOf(time / 1000.0));
-			gui.cumulativeSpeed.setText(String.valueOf((double) bytes / (double) time));
-			for(InfoSender<Pair<Long, Long>> sender : senders){
-				sender.send(new Pair<Long, Long>(bytes, time));
+			gui.speed.setText(String.valueOf((double) bytes / (double) time));
+			for(InfoSender<Pair<Pair<Long, Long>, Integer>> sender : senders){
+				sender.send(new Pair<Pair<Long, Long>, Integer>(new Pair<Long, Long>(bytes, time), attemptCount));
 			}
 
 		}
