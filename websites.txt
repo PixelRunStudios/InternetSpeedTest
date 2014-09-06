@@ -19,7 +19,7 @@ tumblr	http://www.tumblr.com
 Microsoft	http://www.microsoft.com
 PayPal	http://www.PayPal.com
 Apple Inc.	http://www.apple.com
-Internet Movie Database	http://www.imdb.com
+IMDB	http://www.imdb.com
 Adcash	http://www.adcash.com
 Imgur	http://www.imgur.com
 Craigslist	http://www.craigslist.org
