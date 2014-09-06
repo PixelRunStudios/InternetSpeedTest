@@ -20,4 +20,4 @@ data/*
 *.ignore
 /bin/
 
-scr/com/github/assisstion/MainFrame.java
+src/com/github/assisstion/InternetSpeedTest/MainFrame.java
