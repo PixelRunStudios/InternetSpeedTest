@@ -18,7 +18,7 @@ public class WebProcessor{
 	protected long totalBytes = 0;
 	protected int counter = 0;
 	protected boolean https = false;
-	protected int counter2 = 0;
+	protected int failedAttempts = 0;
 
 
 	public static void main(String[] args){
@@ -53,14 +53,14 @@ public class WebProcessor{
 		totalBytes = 0;
 		counter = 0;
 		https = false;
-		counter2 = 0;
+		failedAttempts = 0;
 		System.out.println("Start processing...");
 		for(Map.Entry<String, String> entry : data.entrySet()){
 			counter++;
 			if(!processSite(entry.getKey(), entry.getValue())){
 				String newValue = "https://" + entry.getValue().substring(7);
 				https = true;
-				counter2++;
+				failedAttempts++;
 				processSite(entry.getKey(), newValue);
 				https = false;
 			}
@@ -72,7 +72,7 @@ public class WebProcessor{
 		System.out.println();
 		System.out.println("Done processing!");
 		System.out.println("Amount of total websites: "+ counter);
-		System.out.println("Amount of websites switching to https://: "+counter2);
+		System.out.println("Amount of websites switching to https://: "+failedAttempts);
 		System.out.println("Total Bytes: " + totalBytes);
 		System.out.println("Total Time (ms): " + totalTime);
 		System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
