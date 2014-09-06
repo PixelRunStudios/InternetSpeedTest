@@ -30,7 +30,6 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	public ArrayList<Long> time = new ArrayList<Long>();
 	public MainGUI gui;
 	private String currentName = "N/A";
-	private boolean processing = false;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -66,7 +65,6 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 	public void process(){
 		attemptCount = 0;
-		processing = false;
 		currentName = "N/A";
 		bytes.clear();
 		time.clear();
@@ -178,10 +176,8 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			URL url = new URL(website);
 			HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>> set = new HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>>();
 			set.add(this);
-			processing = true;
 			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set, attemptCount);
 			synchronized(this){
-				processing = false;
 				totalBytes += total.getValueOne();
 				totalTime += total.getValueTwo();
 			}
@@ -217,7 +213,6 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		long bytes;
 		long time;
 		synchronized(this){
-			System.out.println(totalBytes + "+" + info.getValueOne());
 			bytes = totalBytes + info.getValueOne();
 			time = totalTime + info.getValueTwo();
 		}
