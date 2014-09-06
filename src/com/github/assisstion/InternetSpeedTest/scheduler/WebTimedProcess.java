@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.IOException;
 
 import com.github.assisstion.InternetSpeedTest.FileHelper;
+import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
+import com.github.assisstion.Shared.Pair;
 
-public class WebTimedProcess implements Runnable{
+public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 	protected WebProcessor processor;
+
+	public MainGUI gui;
 
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
@@ -68,6 +73,18 @@ public class WebTimedProcess implements Runnable{
 		}
 
 
+	}
+
+	@Override
+	public void send(Pair<Long, Long> info){
+		if(gui == null){
+			return;
+		}
+		long bytes = totalBytes + info.getValueOne();
+		long time = totalTime + info.getValueTwo();
+		gui.allKB.setText(String.valueOf(bytes / 1000));
+		gui.allTime.setText(String.valueOf(time / 1000.0));
+		gui.allSpeed.setText(String.valueOf((double) bytes / (double) time));
 	}
 
 }

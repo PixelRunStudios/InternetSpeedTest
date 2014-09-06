@@ -28,20 +28,14 @@ public class MainGUI extends JFrame{
 	public JLabel siteKB;
 	public JLabel time;
 	public JLabel kb;
-	private JLabel lblCurrentRun;
 	private JLabel run;
-	private JLabel lblCumulativeRunSpeed;
-	private JLabel label_2;
-	private JLabel lblcRunSpTime;
-	private JLabel cRunSpTime;
-	private JLabel lblCRunSpKB;
-	private JLabel CRunSpKB;
+	public JLabel allSpeed;
+	public JLabel allTime;
+	public JLabel allKB;
 	private JButton btnGetGraphs;
 	private GraphWindow window;
 	private HelpWindow helpWindow;
 	private SettingsWindow settingsWindow;
-
-	private JLabel lblTimePassed;
 	private JLabel label_3;
 	private JButton btnAbout;
 	private JButton btnSettings;
@@ -150,7 +144,7 @@ public class MainGUI extends JFrame{
 		kb.setBounds(380, 100, 61, 16);
 		contentPane.add(kb);
 
-		lblCurrentRun = new JLabel("Current Run:");
+		JLabel lblCurrentRun = new JLabel("Current Run:");
 		lblCurrentRun.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblCurrentRun.setBounds(16, 47, 116, 16);
 		contentPane.add(lblCurrentRun);
@@ -160,35 +154,35 @@ public class MainGUI extends JFrame{
 		run.setBounds(169, 47, 61, 16);
 		contentPane.add(run);
 
-		lblCumulativeRunSpeed = new JLabel("Cumulative Run Speed:");
+		JLabel lblCumulativeRunSpeed = new JLabel("Cumulative Run Speed:");
 		lblCumulativeRunSpeed.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblCumulativeRunSpeed.setBounds(16, 117, 151, 16);
 		contentPane.add(lblCumulativeRunSpeed);
 
-		label_2 = new JLabel("N/A");
-		label_2.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
-		label_2.setBounds(169, 118, 61, 16);
-		contentPane.add(label_2);
+		allSpeed = new JLabel("N/A");
+		allSpeed.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
+		allSpeed.setBounds(169, 118, 61, 16);
+		contentPane.add(allSpeed);
 
-		lblcRunSpTime = new JLabel("Time:");
+		JLabel lblcRunSpTime = new JLabel("Time:");
 		lblcRunSpTime.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		lblcRunSpTime.setBounds(230, 117, 42, 16);
 		contentPane.add(lblcRunSpTime);
 
-		cRunSpTime = new JLabel("N/A");
-		cRunSpTime.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-		cRunSpTime.setBounds(275, 117, 61, 16);
-		contentPane.add(cRunSpTime);
+		allTime = new JLabel("N/A");
+		allTime.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		allTime.setBounds(275, 117, 61, 16);
+		contentPane.add(allTime);
 
-		lblCRunSpKB = new JLabel("KB:");
+		JLabel lblCRunSpKB = new JLabel("KB:");
 		lblCRunSpKB.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		lblCRunSpKB.setBounds(342, 117, 25, 16);
 		contentPane.add(lblCRunSpKB);
 
-		CRunSpKB = new JLabel("N/A");
-		CRunSpKB.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-		CRunSpKB.setBounds(380, 117, 61, 16);
-		contentPane.add(CRunSpKB);
+		allKB = new JLabel("N/A");
+		allKB.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		allKB.setBounds(380, 117, 61, 16);
+		contentPane.add(allKB);
 
 		btnGetGraphs = new JButton("GET GRAPHS");
 		btnGetGraphs.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
@@ -201,7 +195,7 @@ public class MainGUI extends JFrame{
 		btnGetGraphs.setBounds(283, 10, 131, 29);
 		contentPane.add(btnGetGraphs);
 
-		lblTimePassed = new JLabel("Time Passed:");
+		JLabel lblTimePassed = new JLabel("Time Passed:");
 		lblTimePassed.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblTimePassed.setBounds(229, 47, 116, 16);
 		contentPane.add(lblTimePassed);
