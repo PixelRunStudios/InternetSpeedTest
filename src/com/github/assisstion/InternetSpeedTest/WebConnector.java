@@ -38,7 +38,7 @@ public class WebConnector {
 	 * @return a long array with two values: the number of bytes of the website and the ms passsed
 	 * @throws IOException when the webpage cannot be connected to
 	 */
-	public static long[] webpageByteCount(URL url) throws IOException{
+	public static long[] webpageByteCount(URL url, boolean silent) throws IOException{
 		//Gets the input stream to load the website
 		InputStream is = url.openConnection().getInputStream();
 		//Wraps the input stream with a buffer
@@ -51,7 +51,9 @@ public class WebConnector {
 		while(value >= 0){
 			count++;
 			if(count % 1000000 == 0){
-				System.out.println("Counted " + count / 1000000 + " million.");
+				if(!silent){
+					System.out.println("Counted " + count / 1000000 + " million.");
+				}
 				if(count >= 100000000){
 					break;
 				}

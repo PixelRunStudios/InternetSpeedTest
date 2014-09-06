@@ -17,7 +17,7 @@ public class WebProcessor{
 	protected int counter = 0;
 	protected boolean https = false;
 	protected int failedAttempts = 0;
-
+	public boolean silent = false;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -46,13 +46,19 @@ public class WebProcessor{
 		data = map;
 	}
 
+	public WebProcessor(){
+		this(getWebsites());
+	}
+
 	public void process(){
 		totalTime = 0;
 		totalBytes = 0;
 		counter = 0;
 		https = false;
 		failedAttempts = 0;
-		System.out.println("Start processing...");
+		if(!silent){
+			System.out.println("Start processing...");
+		}
 		for(Map.Entry<String, String> entry : data.entrySet()){
 			counter++;
 			if(!processSite(entry.getKey(), entry.getValue())){
@@ -67,30 +73,46 @@ public class WebProcessor{
 				break;
 			}
 		}
-		System.out.println();
-		System.out.println("Done processing!");
-		System.out.println("Amount of total websites: "+ counter);
-		System.out.println("Amount of websites switching to https://: "+failedAttempts);
-		System.out.println("Total Bytes: " + totalBytes);
-		System.out.println("Total Time (ms): " + totalTime);
-		System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
+		if(!silent){
+			System.out.println();
+			System.out.println("Done processing!");
+			System.out.println("Amount of total websites: "+ counter);
+			System.out.println("Amount of websites switching to https://: "+failedAttempts);
+			System.out.println("Total Bytes: " + totalBytes);
+			System.out.println("Total Time (ms): " + totalTime);
+			System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
+		}
+	}
+
+	public long getTotalTime(){
+		return totalTime;
+	}
+
+	public long getTotalBytes(){
+		return totalBytes;
 	}
 
 	public boolean processSite(String name, String website){
 		try{
 			if(!https){
-				System.out.println();
+				if(!silent){
+					System.out.println();
+				}
 			}
-			System.out.println(counter + (https ? "B" : "A")+
-					": Try website: " + name);
+			if(!silent){
+				System.out.println(counter + (https ? "B" : "A")+
+						": Try website: " + name);
+			}
 			URL url = new URL(website);
-			long[] total =  WebConnector.webpageByteCount(url);
+			long[] total =  WebConnector.webpageByteCount(url, silent);
 			totalBytes += total[0];
 			totalTime += total[1];
 
-			System.out.println("Bytes: " + total[0]);
-			System.out.println("Time (ms): " + total[1]);
-			System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+			if(!silent){
+				System.out.println("Bytes: " + total[0]);
+				System.out.println("Time (ms): " + total[1]);
+				System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+			}
 
 			if(total[0] == 0){
 				return false;
@@ -98,8 +120,10 @@ public class WebProcessor{
 			return true;
 		}
 		catch(IOException e){
-			System.out.println("Site unavailable! Trying next one.");
-			System.out.println();
+			if(!silent){
+				System.out.println("Site unavailable! Trying next one.");
+				System.out.println();
+			}
 			return false;
 		}
 	}
