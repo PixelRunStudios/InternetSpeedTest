@@ -1,4 +1,4 @@
-package com.github.assisstion.InternetSpeedTest;
+package com.github.assisstion.InternetSpeedTest.web;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import com.github.assisstion.InternetSpeedTest.MainGUI;
 import com.github.assisstion.Shared.Pair;
 
 public class WebConnector {

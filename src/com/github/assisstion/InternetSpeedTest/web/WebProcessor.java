@@ -1,4 +1,4 @@
-package com.github.assisstion.InternetSpeedTest;
+package com.github.assisstion.InternetSpeedTest.web;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.github.assisstion.InternetSpeedTest.FileHelper;
+import com.github.assisstion.InternetSpeedTest.MainGUI;
 import com.github.assisstion.Shared.Pair;
 
 public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>{

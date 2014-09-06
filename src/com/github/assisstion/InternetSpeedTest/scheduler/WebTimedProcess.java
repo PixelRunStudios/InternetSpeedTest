@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.github.assisstion.InternetSpeedTest.FileHelper;
-import com.github.assisstion.InternetSpeedTest.WebProcessor;
+import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 
 public class WebTimedProcess implements Runnable{
 

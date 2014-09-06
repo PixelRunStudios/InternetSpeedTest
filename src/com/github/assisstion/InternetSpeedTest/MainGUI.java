@@ -13,6 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.github.assisstion.InternetSpeedTest.web.WebConnector;
+import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
+
 public class MainGUI extends JFrame{
 
 	private static final long serialVersionUID = 8479444564966231741L;
