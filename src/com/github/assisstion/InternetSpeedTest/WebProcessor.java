@@ -47,23 +47,23 @@ public class WebProcessor{
 	public void process(){
 		totalTime = 0;
 		totalBytes = 0;
+		System.out.println("Start processing...");
 		for(Map.Entry<String, String> entry : data.entrySet()){
-			processSite(entry.getValue());
+			processSite(entry.getKey(), entry.getValue());
 		}
+		System.out.println("Done processing!");
 		System.out.println("Total Bytes: " + totalBytes);
 		System.out.println("Total Time (ms): " + totalTime);
-		long wholePart = totalBytes / (totalTime * 1000);
-		long fractionPart = totalBytes / totalTime % 1000;
-		System.out.println("Bytes / Second" + wholePart + "." + fractionPart);
+		System.out.println("Kilobytes / Second: " + (double) totalBytes / (double) totalTime);
 	}
 	
-	public void processSite(String website){
+	public void processSite(String name, String website){
 		try{
+			System.out.println("Try website: " + name);
 			URL url = new URL(website);
 			long time = System.currentTimeMillis();
-			String site = WebConnector.getWebpage(url);
+			totalBytes += WebConnector.webpageByteCount(url);
 			long difference = System.currentTimeMillis() - time;
-			totalBytes += site.length();
 			totalTime += difference;
 		}
 		catch(IOException e){
