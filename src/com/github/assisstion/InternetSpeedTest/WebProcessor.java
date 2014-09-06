@@ -9,10 +9,10 @@ import java.util.Map;
 import com.github.assisstion.InternetSpeedTest.web.WebConnector;
 
 public class WebProcessor{
-	
-	
+
+
 	protected Map<String, String> data;
-	
+
 	//Time in ms
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
@@ -21,7 +21,7 @@ public class WebProcessor{
 		WebProcessor wp = new WebProcessor(getWebsites());
 		wp.process();
 	}
-	
+
 	public static Map<String, String> getWebsites(){
 		Map<String, String> out = new LinkedHashMap<String, String>();
 		try{
@@ -43,7 +43,7 @@ public class WebProcessor{
 	public WebProcessor(Map<String, String> map){
 		data = map;
 	}
-	
+
 	public void process(){
 		totalTime = 0;
 		totalBytes = 0;
@@ -59,7 +59,7 @@ public class WebProcessor{
 		System.out.println("Total Time (ms): " + totalTime);
 		System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
 	}
-	
+
 	public void processSite(String name, String website){
 		try{
 			System.out.println("Try website: " + name);
