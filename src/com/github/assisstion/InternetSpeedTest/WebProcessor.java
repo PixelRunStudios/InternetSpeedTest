@@ -26,7 +26,7 @@ public class WebProcessor{
 		Map<String, String> out = new LinkedHashMap<String, String>();
 		try{
 			//Insert your own file here
-			String in = FileHelper.read(new File("/Users/mfeng17/Desktop/test.txt"));
+			String in = FileHelper.read(new File("websites.txt"));
 			String[] inArray = in.split("\n");
 			for(String part : inArray){
 				String[] partArray = part.split("\t");
@@ -75,6 +75,7 @@ public class WebProcessor{
 			System.out.println("Bytes: " + total[0]);
 			System.out.println("Time (ms): " + total[1]);
 			System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+			System.out.println();
 			if(total[0] == 0){
 				return false;
 			}
