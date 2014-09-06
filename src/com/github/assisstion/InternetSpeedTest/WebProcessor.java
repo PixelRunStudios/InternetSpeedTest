@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WebProcessor{
@@ -24,7 +25,6 @@ public class WebProcessor{
 	public boolean silent = false;
 	public ArrayList<Long> bytes = new ArrayList<Long>();
 	public ArrayList<Long> time = new ArrayList<Long>();
-
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -164,22 +164,22 @@ public class WebProcessor{
 						". Trying website: " + name);
 			}
 			URL url = new URL(website);
-			long[] total =  WebConnector.webpageByteCount(url, silent);
-			totalBytes += total[0];
-			totalTime += total[1];
+			List<Long> total =  WebConnector.webpageByteCount(url, silent);
+			totalBytes += total.get(0);
+			totalTime += total.get(1);
 
 
-			if(total[0] == 0){
+			if(total.get(0) == 0){
 				return false;
 			}
 			if(!silent){
-				System.out.println("Bytes: " + total[0]);
-				System.out.println("Time (ms): " + total[1]);
-				System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+				System.out.println("Bytes: " + total.get(0));
+				System.out.println("Time (ms): " + total.get(1));
+				System.out.println("Speed (KB/s): " + (double) total.get(0) / (double) total.get(1));
 
 			}
-			bytes.add(total[0]);
-			time.add(total[1]);
+			bytes.add(total.get(0));
+			time.add(total.get(1));
 			return true;
 		}
 		catch(IOException e){

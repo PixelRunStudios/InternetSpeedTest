@@ -14,13 +14,13 @@ public class MainGUI extends JFrame{
 	private static final long serialVersionUID = 8479444564966231741L;
 
 	private JPanel contentPane;
-	private JLabel website;
-	private JLabel speed;
-	private JLabel cumulativeSpeed;
-	private JLabel siteTime;
-	private JLabel siteKB;
-	private JLabel time;
-	private JLabel kb;
+	public JLabel website;
+	public JLabel speed;
+	public JLabel cumulativeSpeed;
+	public JLabel siteTime;
+	public JLabel siteKB;
+	public JLabel time;
+	public JLabel kb;
 
 	/**
 	 * Launch the application.
