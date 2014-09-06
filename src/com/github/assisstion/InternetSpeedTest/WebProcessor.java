@@ -49,7 +49,11 @@ public class WebProcessor{
 		totalBytes = 0;
 		System.out.println("Start processing...");
 		for(Map.Entry<String, String> entry : data.entrySet()){
-			processSite(entry.getKey(), entry.getValue());
+			if(!processSite(entry.getKey(), entry.getValue())){
+				String newValue = "https://" + entry.getValue().substring(7);
+				processSite(entry.getKey(), newValue);
+			}
+			//Waits for 1 minute before stopping
 			if(totalTime > 60000){
 				break;
 			}
@@ -60,7 +64,7 @@ public class WebProcessor{
 		System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
 	}
 
-	public void processSite(String name, String website){
+	public boolean processSite(String name, String website){
 		try{
 			System.out.println("Try website: " + name);
 			URL url = new URL(website);
@@ -71,9 +75,14 @@ public class WebProcessor{
 			System.out.println("Bytes: " + total[0]);
 			System.out.println("Time (ms): " + total[1]);
 			System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+			if(total[0] == 0){
+				return false;
+			}
+			return true;
 		}
 		catch(IOException e){
-			e.printStackTrace();
+			System.out.println("Site unavailable! Trying next one.");
+			return false;
 		}
 	}
 }
