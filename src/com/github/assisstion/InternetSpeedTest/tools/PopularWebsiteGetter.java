@@ -51,7 +51,6 @@ public class PopularWebsiteGetter{
 			}
 			String[] lines = website.split("\n");
 			String[] fifthLine = lines[5].split("<td>")[1].split("</td>");
-			System.out.println(fifthLine[0]);
 			if(fifthLine[0].contains("Pornography")){
 				thing = true;
 			}
