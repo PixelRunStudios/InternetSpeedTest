@@ -1,10 +1,115 @@
 package com.github.assisstion.InternetSpeedTest;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainGUI {
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+public class MainGUI extends JFrame{
+
+	private static final long serialVersionUID = 8479444564966231741L;
+
+	private JPanel contentPane;
+	private JLabel website;
+	private JLabel speed;
+	private JLabel cumulativeSpeed;
+	private JLabel siteTime;
+	private JLabel siteKB;
+	private JLabel time;
+	private JLabel kb;
+
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args){
+		EventQueue.invokeLater(new Runnable(){
+			@Override
+			public void run(){
+				try{
+					MainGUI frame = new MainGUI();
+					frame.setVisible(true);
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public MainGUI(){
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 450, 300);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		JLabel lblSpeed = new JLabel("Website Speed:");
+		lblSpeed.setBounds(6, 36, 101, 16);
+		contentPane.add(lblSpeed);
+
+		JLabel lblCumulativeSpeed = new JLabel("Cumulative Speed:");
+		lblCumulativeSpeed.setBounds(6, 64, 116, 16);
+		contentPane.add(lblCumulativeSpeed);
+
+		JLabel lblCurrentWebsite = new JLabel("Current Website:");
+		lblCurrentWebsite.setBounds(6, 8, 116, 16);
+		contentPane.add(lblCurrentWebsite);
+
+		website = new JLabel("N/A");
+		website.setBounds(146, 8, 61, 16);
+		contentPane.add(website);
+
+		speed = new JLabel("N/A");
+		speed.setBounds(146, 36, 61, 16);
+		contentPane.add(speed);
+
+		cumulativeSpeed = new JLabel("N/A");
+		cumulativeSpeed.setBounds(146, 64, 61, 16);
+		contentPane.add(cumulativeSpeed);
+
+		JLabel lblTime = new JLabel("Time:");
+		lblTime.setBounds(219, 36, 42, 16);
+		contentPane.add(lblTime);
+
+		JLabel lblKb = new JLabel("KB:");
+		lblKb.setBounds(345, 36, 25, 16);
+		contentPane.add(lblKb);
+
+		JLabel label = new JLabel("Time:");
+		label.setBounds(219, 64, 42, 16);
+		contentPane.add(label);
+
+		JLabel label_1 = new JLabel("KB:");
+		label_1.setBounds(345, 64, 25, 16);
+		contentPane.add(label_1);
+
+		siteTime = new JLabel("N/A");
+		siteTime.setBounds(264, 36, 61, 16);
+		contentPane.add(siteTime);
+
+		siteKB = new JLabel("N/A");
+		siteKB.setBounds(383, 36, 61, 16);
+		contentPane.add(siteKB);
+
+		time = new JLabel("N/A");
+		time.setBounds(264, 64, 61, 16);
+		contentPane.add(time);
+
+		kb = new JLabel("N/A");
+		kb.setBounds(383, 64, 61, 16);
+		contentPane.add(kb);
+	}
+
+
+	public static void test(){
 		System.out.println("Hello, world!");
 		//Records program start time in nanoseconds
 		long startTime = System.nanoTime();
