@@ -1,10 +1,12 @@
 package com.github.assisstion.InternetSpeedTest.tools;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.web.WebConnector;
 
 //Use http://en.wikipedia.org/wiki/List_of_most_popular_websites
@@ -79,6 +81,18 @@ public class PopularWebsiteGetter{
 			System.out.println();
 			
 		}
+		
+		String everything = "";
+		
+		for(int i = 0; i<nameA.size();i++){
+			everything += nameA.get(i) + "	" + urlA.get(i)+ "\n";
+		}
+		
+		
+		
+		File file = new File("/Users/alexanderguo/Desktop/websites.txt");
+		
+		FileHelper.write(file, everything);
 
 		return sitesTemp;
 	}
