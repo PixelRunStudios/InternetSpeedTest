@@ -16,6 +16,10 @@ public class WebProcessor{
 	//Time in ms
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
+	protected int counter = 0;
+	protected boolean https = false;
+	protected int counter2 = 0;
+
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -47,18 +51,28 @@ public class WebProcessor{
 	public void process(){
 		totalTime = 0;
 		totalBytes = 0;
+		counter = 0;
+		https = false;
+		counter2 = 0;
 		System.out.println("Start processing...");
 		for(Map.Entry<String, String> entry : data.entrySet()){
+			counter++;
 			if(!processSite(entry.getKey(), entry.getValue())){
 				String newValue = "https://" + entry.getValue().substring(7);
+				https = true;
+				counter2++;
 				processSite(entry.getKey(), newValue);
+				https = false;
 			}
 			//Waits for 1 minute before stopping
 			if(totalTime > 60000){
 				break;
 			}
 		}
+		System.out.println();
 		System.out.println("Done processing!");
+		System.out.println("Amount of total websites: "+ counter);
+		System.out.println("Amount of websites switching to https://: "+counter2);
 		System.out.println("Total Bytes: " + totalBytes);
 		System.out.println("Total Time (ms): " + totalTime);
 		System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
@@ -66,7 +80,11 @@ public class WebProcessor{
 
 	public boolean processSite(String name, String website){
 		try{
-			System.out.println("Try website: " + name);
+			if(!https){
+				System.out.println();
+			}
+			System.out.println(counter + (https ? "B" : "A")+
+					": Try website: " + name);
 			URL url = new URL(website);
 			long[] total =  WebConnector.webpageByteCount(url);
 			totalBytes += total[0];
@@ -75,7 +93,7 @@ public class WebProcessor{
 			System.out.println("Bytes: " + total[0]);
 			System.out.println("Time (ms): " + total[1]);
 			System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
-			System.out.println();
+
 			if(total[0] == 0){
 				return false;
 			}
@@ -83,6 +101,7 @@ public class WebProcessor{
 		}
 		catch(IOException e){
 			System.out.println("Site unavailable! Trying next one.");
+			System.out.println();
 			return false;
 		}
 	}
