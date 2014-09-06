@@ -1,6 +1,8 @@
 package com.github.assisstion.InternetSpeedTest;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.URL;
 
@@ -31,6 +33,7 @@ public class MainGUI extends JFrame{
 	private JLabel lblCRunSpKB;
 	private JLabel CRunSpKB;
 	private JButton btnGetGraphs;
+	private GraphWindow window;
 
 	/**
 	 * Launch the application.
@@ -54,6 +57,7 @@ public class MainGUI extends JFrame{
 	 * Create the frame.
 	 */
 	public MainGUI(){
+		window = new GraphWindow();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 149);
 		contentPane = new JPanel();
@@ -150,6 +154,12 @@ public class MainGUI extends JFrame{
 		contentPane.add(CRunSpKB);
 
 		btnGetGraphs = new JButton("GET GRAPHS");
+		btnGetGraphs.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				window.setVisible(true);
+			}
+		});
 		btnGetGraphs.setBounds(301, 16, 117, 29);
 		contentPane.add(btnGetGraphs);
 
