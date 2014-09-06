@@ -4,10 +4,11 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.SwingWorker;
+
+import com.github.assisstion.Shared.Pair;
 
 public class WebConnector {
 
@@ -43,32 +44,34 @@ public class WebConnector {
 	 * @return a long array with two values: the number of bytes of the website and the ms passsed
 	 * @throws IOException when the webpage cannot be connected to
 	 */
-	public static List<Long> webpageByteCount(URL url, boolean silent) throws IOException{
-		WebpageByteCount wbc = new WebpageByteCount(url, silent);
+	public static Pair<Long, Long> webpageByteCount(URL url, boolean silent, MainGUI gui) throws IOException{
+		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui);
 		wbc.execute();
 		try{
 			return wbc.get();
 		}
 		catch(Exception e){
-			throw new RuntimeException(e);
+			throw new IOException(e);
 		}
 	}
 
-	public static class WebpageByteCount extends SwingWorker<List<Long>, Long>{
+	public static class WebpageByteCount extends SwingWorker<Pair<Long, Long>, Pair<Long, Long>>{
 
 		protected URL url;
 		protected boolean silent;
+		protected MainGUI gui;
 
 		private long count;
 		private long startTime;
 
-		public WebpageByteCount(URL url, boolean silent){
+		public WebpageByteCount(URL url, boolean silent, MainGUI gui){
 			this.url = url;
 			this.silent = silent;
+			this.gui = gui;
 		}
 
 		@Override
-		protected List<Long> doInBackground() throws Exception{
+		protected Pair<Long, Long> doInBackground() throws Exception{
 			//Gets the input stream to load the website
 			InputStream is = url.openConnection().getInputStream();
 			//Wraps the input stream with a buffer
@@ -81,7 +84,7 @@ public class WebConnector {
 			while(value >= 0){
 				count++;
 				if(count % 1000 == 0){
-					publish();
+					publish(new Pair<Long, Long>(count, System.currentTimeMillis()));
 					if(count % 1000000 == 0){
 						if(!silent){
 							System.out.println("Counted " + count / 1000000 + " million.");
@@ -95,13 +98,20 @@ public class WebConnector {
 				value = bis.read();
 			}
 			long difference = System.currentTimeMillis() - startTime;
-			//Returns the webpage's html contents
-			return Arrays.asList(count, difference);
+			return new Pair<Long, Long>(count, difference);
 		}
 
 		@Override
-		protected void process(List<Long> longs){
-			//TODO to be completed
+		protected void process(List<Pair<Long, Long>> pairs){
+			if(gui == null){
+				return;
+			}
+			Pair<Long, Long> pair = pairs.get(pairs.size() - 1);
+			long bytes = pair.getValueOne();
+			long time = pair.getValueTwo() - startTime;
+			gui.kb.setText(String.valueOf(bytes / 1000));
+			gui.time.setText(String.valueOf(time / 1000.0));
+			gui.speed.setText(String.valueOf((double) bytes / (double) time));
 		}
 
 
