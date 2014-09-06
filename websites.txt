@@ -23,7 +23,6 @@ Internet Movie Database	http://www.imdb.com
 Adcash	http://www.adcash.com
 Imgur	http://www.imgur.com
 Craigslist	http://www.craigslist.org
-Neobux	http://www.neobux.com
 Reddit	http://www.reddit.com
 Stack Overflow	http://www.stackoverflow.com
 FC2, Inc.	http://www.fc2.com

@@ -1,8 +1,11 @@
 package com.github.assisstion.InternetSpeedTest;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,10 +17,14 @@ public class WebProcessor{
 	//Time in ms
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
+	protected int success = 0;
 	protected int counter = 0;
 	protected boolean https = false;
 	protected int failedAttempts = 0;
 	public boolean silent = false;
+	public ArrayList<Long> bytes = new ArrayList<Long>();
+	public ArrayList<Long> time = new ArrayList<Long>();
+
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -51,6 +58,8 @@ public class WebProcessor{
 	}
 
 	public void process(){
+		bytes.clear();
+		time.clear();
 		totalTime = 0;
 		totalBytes = 0;
 		counter = 0;
@@ -59,29 +68,80 @@ public class WebProcessor{
 		if(!silent){
 			System.out.println("Start processing...");
 		}
-		for(Map.Entry<String, String> entry : data.entrySet()){
-			counter++;
-			if(!processSite(entry.getKey(), entry.getValue())){
-				String newValue = "https://" + entry.getValue().substring(7);
-				https = true;
-				failedAttempts++;
-				processSite(entry.getKey(), newValue);
-				https = false;
+		BufferedWriter writer = null;
+		try{
+			try{
+				new File("data").mkdir();
+				writer = new BufferedWriter(new FileWriter(new File("data/output.txt")));
 			}
-			//Waits for 1 minute before stopping
-			if(totalTime > 60000){
-				break;
+			catch(IOException e1){
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			for(Map.Entry<String, String> entry : data.entrySet()){
+				boolean completelyFailed = false;
+				String newValue = null;
+				counter++;
+				if(!processSite(entry.getKey(), entry.getValue())){
+					newValue = "https://" + entry.getValue().substring(7);
+					https = true;
+					failedAttempts++;
+					completelyFailed = !processSite(entry.getKey(), newValue);
+					success += completelyFailed ? 0 : 1;
+					https = false;
+				}
+				else{
+					success++;
+				}
+				if(!completelyFailed){
+					String string = "";
+					string += entry.getKey() + "\t"+ (newValue == null ? entry.getValue() : newValue) + "\t" + bytes.get(bytes.size() - 1) + "\t" + time.get(bytes.size() - 1) + "\n";
+
+					try{
+						writer.write(string);
+					}
+					catch(IOException e){
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+
+				//Waits for 1 minute before stopping
+				if(totalTime > 60000){
+					break;
+				}
+			}
+		}
+		finally{
+			if(writer != null){
+				try{
+					writer.close();
+				}
+				catch(IOException e){
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		if(!silent){
 			System.out.println();
 			System.out.println("Done processing!");
-			System.out.println("Amount of total websites: "+ counter);
+			System.out.println("Amount of total websites: "+ success + " out of " + counter);
 			System.out.println("Amount of websites switching to https://: "+failedAttempts);
 			System.out.println("Total Bytes: " + totalBytes);
 			System.out.println("Total Time (ms): " + totalTime);
 			System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
+			/*for(int i = 0; i<bytes.size();i++){
+				System.out.println(i);
+				System.out.println(bytes.get(i));
+				System.out.println(time.get(i));
+				System.out.println();
+			}*/
 		}
+
+
+
 	}
 
 	public long getTotalTime(){
@@ -100,23 +160,26 @@ public class WebProcessor{
 				}
 			}
 			if(!silent){
-				System.out.println(counter + (https ? "B" : "A")+
-						": Try website: " + name);
+				System.out.println(counter + (https ? "B" : "A") +
+						". Trying website: " + name);
 			}
 			URL url = new URL(website);
 			long[] total =  WebConnector.webpageByteCount(url, silent);
 			totalBytes += total[0];
 			totalTime += total[1];
 
-			if(!silent){
-				System.out.println("Bytes: " + total[0]);
-				System.out.println("Time (ms): " + total[1]);
-				System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
-			}
 
 			if(total[0] == 0){
 				return false;
 			}
+			if(!silent){
+				System.out.println("Bytes: " + total[0]);
+				System.out.println("Time (ms): " + total[1]);
+				System.out.println("Speed (KB/s): " + (double) total[0] / (double) total[1]);
+
+			}
+			bytes.add(total[0]);
+			time.add(total[1]);
 			return true;
 		}
 		catch(IOException e){
