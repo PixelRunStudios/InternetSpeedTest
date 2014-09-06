@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -44,8 +45,9 @@ public class WebConnector {
 	 * @return a long array with two values: the number of bytes of the website and the ms passsed
 	 * @throws IOException when the webpage cannot be connected to
 	 */
-	public static Pair<Long, Long> webpageByteCount(URL url, boolean silent, MainGUI gui) throws IOException{
-		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui);
+	public static Pair<Long, Long> webpageByteCount(URL url, boolean silent, MainGUI gui,
+			Collection<InfoSender<Pair<Long, Long>>> senders) throws IOException{
+		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui, senders );
 		wbc.execute();
 		try{
 			return wbc.get();
@@ -60,14 +62,17 @@ public class WebConnector {
 		protected URL url;
 		protected boolean silent;
 		protected MainGUI gui;
+		protected Collection<InfoSender<Pair<Long, Long>>> senders;
 
 		private long count;
 		private long startTime;
 
-		public WebpageByteCount(URL url, boolean silent, MainGUI gui){
+		public WebpageByteCount(URL url, boolean silent, MainGUI gui,
+				Collection<InfoSender<Pair<Long, Long>>> senders){
 			this.url = url;
 			this.silent = silent;
 			this.gui = gui;
+			this.senders = senders;
 		}
 
 		@Override
@@ -109,9 +114,13 @@ public class WebConnector {
 			Pair<Long, Long> pair = pairs.get(pairs.size() - 1);
 			long bytes = pair.getValueOne();
 			long time = pair.getValueTwo() - startTime;
-			gui.kb.setText(String.valueOf(bytes / 1000));
-			gui.time.setText(String.valueOf(time / 1000.0));
-			gui.speed.setText(String.valueOf((double) bytes / (double) time));
+			gui.siteKB.setText(String.valueOf(bytes / 1000));
+			gui.siteTime.setText(String.valueOf(time / 1000.0));
+			gui.cumulativeSpeed.setText(String.valueOf((double) bytes / (double) time));
+			for(InfoSender<Pair<Long, Long>> sender : senders){
+				sender.send(new Pair<Long, Long>(bytes, time));
+			}
+
 		}
 
 

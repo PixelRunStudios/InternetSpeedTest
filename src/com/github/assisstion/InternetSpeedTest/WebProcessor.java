@@ -6,12 +6,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.github.assisstion.Shared.Pair;
 
-public class WebProcessor{
+public class WebProcessor implements InfoSender<Pair<Long, Long>>{
 
 
 	protected Map<String, String> data;
@@ -167,7 +168,9 @@ public class WebProcessor{
 						". Trying website: " + name);
 			}
 			URL url = new URL(website);
-			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui);
+			HashSet<InfoSender<Pair<Long, Long>>> set = new HashSet<InfoSender<Pair<Long, Long>>>();
+			set.add(this);
+			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set);
 			totalBytes += total.getValueOne();
 			totalTime += total.getValueTwo();
 
@@ -192,5 +195,14 @@ public class WebProcessor{
 			}
 			return false;
 		}
+	}
+
+	@Override
+	public void send(Pair<Long, Long> info){
+		long bytes = totalBytes + info.getValueOne();
+		long time = totalTime + info.getValueTwo();
+		gui.kb.setText(String.valueOf(bytes / 1000));
+		gui.time.setText(String.valueOf(time / 1000.0));
+		gui.speed.setText(String.valueOf((double) bytes / (double) time));
 	}
 }
