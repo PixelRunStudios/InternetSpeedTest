@@ -30,7 +30,6 @@ public class PopularWebsiteGetter{
 	public static String[] getWebsites() throws MalformedURLException, IOException{
 		String name = "";
 		boolean thing = false;
-		String a = "";
 		String url = "";
 		ArrayList<String> nameA = new ArrayList<String>();
 		ArrayList<String> urlA = new ArrayList<String>();
