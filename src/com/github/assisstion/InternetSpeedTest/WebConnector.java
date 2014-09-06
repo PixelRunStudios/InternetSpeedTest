@@ -1,4 +1,4 @@
-package com.github.assisstion.InternetSpeedTest.web;
+package com.github.assisstion.InternetSpeedTest;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

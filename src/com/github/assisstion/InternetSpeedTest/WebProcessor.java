@@ -6,8 +6,6 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.github.assisstion.InternetSpeedTest.web.WebConnector;
-
 public class WebProcessor{
 
 

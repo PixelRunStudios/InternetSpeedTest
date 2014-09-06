@@ -3,8 +3,6 @@ package com.github.assisstion.InternetSpeedTest;
 import java.io.IOException;
 import java.net.URL;
 
-import com.github.assisstion.InternetSpeedTest.web.WebConnector;
-
 public class MainGUI {
 	public static void main(String[] args){
 		System.out.println("Hello, world!");
