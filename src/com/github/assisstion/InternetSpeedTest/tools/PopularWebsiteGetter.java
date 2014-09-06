@@ -12,7 +12,7 @@ import com.github.assisstion.InternetSpeedTest.web.WebConnector;
 //Use http://en.wikipedia.org/wiki/List_of_most_popular_websites
 //Sept. 5, 2014
 public class PopularWebsiteGetter{
-
+	
 	public static void main(String[] args){
 		try{
 			getWebsites();
@@ -26,7 +26,7 @@ public class PopularWebsiteGetter{
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static String[] getWebsites() throws MalformedURLException, IOException{
 		String name = "";
 		String url = "";
@@ -47,7 +47,7 @@ public class PopularWebsiteGetter{
 				website = split[i].split("</tr>")[0];
 			}
 			String[] lines = website.split("\n");
-			
+
 			for(int j = 0; j < lines.length; j++){
 				//System.out.println(lines[j]);
 				switch(j){
@@ -73,27 +73,27 @@ public class PopularWebsiteGetter{
 				}
 			}
 		}
-
+		
 		for(int i = 0; i < nameA.size();i++){
 			System.out.println(i);
 			System.out.println(nameA.get(i));
 			System.out.println(urlA.get(i));
 			System.out.println();
-			
+
 		}
-		
+
 		String everything = "";
-		
+
 		for(int i = 0; i<nameA.size();i++){
 			everything += nameA.get(i) + "	" + urlA.get(i)+ "\n";
 		}
-		
-		
-		
-		File file = new File("/Users/alexanderguo/Desktop/websites.txt");
-		
-		FileHelper.write(file, everything);
 
+
+
+		File file = new File("/Users/alexanderguo/Desktop/websites.txt");
+
+		FileHelper.write(file, everything);
+		
 		return sitesTemp;
 	}
 }
