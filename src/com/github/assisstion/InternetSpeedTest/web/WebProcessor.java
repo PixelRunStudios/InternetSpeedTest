@@ -1,10 +1,12 @@
 package com.github.assisstion.InternetSpeedTest.web;
 
+import java.awt.EventQueue;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -32,10 +34,16 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	public ArrayList<Long> time = new ArrayList<Long>();
 	public MainGUI gui;
 	private String currentName = "N/A";
+	private boolean done = false;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
 		wp.process();
+	}
+
+	public static double roundThreeDecimals(double d){
+		DecimalFormat threeDForm = new DecimalFormat("#.###");
+		return Double.valueOf(threeDForm.format(d));
 	}
 
 	public static Map<String, String> getWebsites(){
@@ -66,6 +74,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 
 	public void process(){
+		done = false;
 		attemptCount = 0;
 		currentName = "N/A";
 		bytes.clear();
@@ -134,6 +143,20 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				}
 			}
 		}
+		done = true;
+		EventQueue.invokeLater(new Runnable(){
+
+			@Override
+			public void run(){
+				if(gui != null){
+					gui.website.setText("N/A");
+					gui.speed.setText("N/A");
+					gui.siteKB.setText("N/A");
+					gui.siteTime.setText("N/A");
+				}
+			}
+
+		});
 		if(!silent){
 			System.out.println();
 			System.out.println("Done processing!");
@@ -208,7 +231,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 	@Override
 	public void send(Pair<Pair<Long, Long>, Integer> infox){
-		if(attemptCount != infox.getValueTwo()){
+		if(done || attemptCount != infox.getValueTwo()){
 			return;
 		}
 		Pair<Long, Long> info = infox.getValueOne();
@@ -218,9 +241,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			bytes = totalBytes + info.getValueOne();
 			time = totalTime + info.getValueTwo();
 		}
-		gui.website.setText(currentName);
+		gui.website.setText(currentName + "  ("+ counter +"/"+data.size()+")");
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
-		gui.cumulativeSpeed.setText(String.valueOf((double) bytes / (double) time));
+		gui.cumulativeSpeed.setText(String.valueOf(roundThreeDecimals((double) bytes / (double) time)));
 	}
 }
