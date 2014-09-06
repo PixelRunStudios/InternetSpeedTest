@@ -6,8 +6,8 @@ import java.io.InputStream;
 import java.net.URL;
 
 public class WebConnector {
-	
-	
+
+
 	/**
 	 * Gets the HTML representation of a webpage as a String
 	 * @param url the URL of the webpage
@@ -31,18 +31,20 @@ public class WebConnector {
 		//Returns the webpage's html contents
 		return output;
 	}
-	
+
 	/**
 	 * Gets the number of bytes of a webpage
 	 * @param url the URL of the webpage
-	 * @return the number of bytes of the website
+	 * @return a long array with two values: the number of bytes of the website and the ms passsed
 	 * @throws IOException when the webpage cannot be connected to
 	 */
-	public static long webpageByteCount(URL url) throws IOException{
+	public static long[] webpageByteCount(URL url) throws IOException{
 		//Gets the input stream to load the website
 		InputStream is = url.openConnection().getInputStream();
 		//Wraps the input stream with a buffer
 		BufferedInputStream bis = new BufferedInputStream(is);
+		//Starts the timer
+		long time = System.currentTimeMillis();
 		//Counts one unicode byte
 		int value = bis.read();
 		long count = 0;
@@ -57,7 +59,8 @@ public class WebConnector {
 			//Sets the value to the next character
 			value = bis.read();
 		}
+		long difference = System.currentTimeMillis() - time;
 		//Returns the webpage's html contents
-		return count;
+		return new long[]{count, difference};
 	}
 }

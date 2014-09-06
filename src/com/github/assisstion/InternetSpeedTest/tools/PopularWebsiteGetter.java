@@ -98,7 +98,7 @@ public class PopularWebsiteGetter{
 
 
 
-		File file = new File("/Users/alexanderguo/Desktop/websites.txt");
+		File file = new File("");
 
 		FileHelper.write(file, everything);
 
