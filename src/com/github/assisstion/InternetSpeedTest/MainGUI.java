@@ -29,7 +29,7 @@ public class MainGUI extends JFrame{
 	public JLabel siteKB;
 	public JLabel time;
 	public JLabel kb;
-	private JLabel run;
+	public JLabel run;
 	public JLabel allSpeed;
 	public JLabel allTime;
 	public JLabel allKB;
@@ -37,7 +37,7 @@ public class MainGUI extends JFrame{
 	private GraphWindow window;
 	private HelpWindow helpWindow;
 	private SettingsWindow settingsWindow;
-	private JLabel label_3;
+	public JLabel timePassed;
 	private JButton btnAbout;
 	private JButton btnSettings;
 
@@ -201,10 +201,10 @@ public class MainGUI extends JFrame{
 		lblTimePassed.setBounds(229, 47, 116, 16);
 		contentPane.add(lblTimePassed);
 
-		label_3 = new JLabel("N/A");
-		label_3.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		label_3.setBounds(342, 47, 61, 16);
-		contentPane.add(label_3);
+		timePassed = new JLabel("N/A");
+		timePassed.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		timePassed.setBounds(342, 47, 61, 16);
+		contentPane.add(timePassed);
 
 		btnAbout = new JButton("?");
 		btnAbout.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));

@@ -1,5 +1,6 @@
 package com.github.assisstion.InternetSpeedTest.scheduler;
 
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,12 +16,16 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 	public MainGUI gui;
 
+	protected int run = 0;
+	protected long startTime = 0;
+
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
 
 	private File file = new File("data/output2.txt");
 
 	public WebTimedProcess(){
+		startTime = System.currentTimeMillis();
 		processor = new WebProcessor();
 		processor.silent = true;
 		try{
@@ -30,10 +35,33 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		new Thread(new RepetitionScheduler(-1, 100, new Runnable(){
+
+			@Override
+			public void run(){
+				if(gui != null){
+					gui.timePassed.setText(String.valueOf(
+							(System.currentTimeMillis() - startTime) / 100 / 10.0));
+				}
+			}
+
+		})).start();;
 	}
 
 	@Override
 	public void run(){
+		run++;
+		EventQueue.invokeLater(new Runnable(){
+
+			@Override
+			public void run(){
+				if(gui != null){
+					gui.run.setText(String.valueOf(run));
+				}
+			}
+
+		});
+
 		String in = "";
 		try{
 			in = FileHelper.read(file);
@@ -88,5 +116,4 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		gui.allTime.setText(String.valueOf(time / 1000.0));
 		gui.allSpeed.setText(String.valueOf((double) bytes / (double) time));
 	}
-
 }

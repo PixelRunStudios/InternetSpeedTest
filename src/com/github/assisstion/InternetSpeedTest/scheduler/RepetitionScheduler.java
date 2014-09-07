@@ -21,8 +21,7 @@ public class RepetitionScheduler implements Runnable{
 	@Override
 	public void run(){
 		currentIterations = 0;
-		while(currentIterations++ < iterations){
-			System.out.println(currentIterations);
+		while(iterations < 0 || currentIterations++ < iterations){
 			runnable.run();
 			try{
 				Thread.sleep(delay);
