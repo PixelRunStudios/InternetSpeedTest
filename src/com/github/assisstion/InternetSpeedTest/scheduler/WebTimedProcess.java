@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
 import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
 import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
+import com.github.assisstion.InternetSpeedTest.helper.TimeHelper;
 import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;
@@ -41,8 +42,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 			@Override
 			public void run(){
 				if(gui != null){
-					gui.timePassed.setText(String.valueOf(
-							(System.currentTimeMillis() - startTime) / 100 / 10.0));
+					gui.timePassed.setText(String.valueOf(TimeHelper.formatSeconds((
+							System.currentTimeMillis() - startTime) / 100 / 10.0)));
 				}
 			}
 
