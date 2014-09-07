@@ -14,6 +14,7 @@ import java.util.Map;
 
 import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.Shared.Pair;
 
 public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>{
@@ -35,6 +36,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	public MainGUI gui;
 	private String currentName = "N/A";
 	private boolean done = false;
+	public WebTimedProcess timer;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -245,5 +247,8 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
 		gui.cumulativeSpeed.setText(String.valueOf(roundThreeDecimals((double) bytes / (double) time)));
+		if(timer != null){
+			timer.send(new Pair<Long, Long>(bytes, time));
+		}
 	}
 }

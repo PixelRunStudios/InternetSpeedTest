@@ -13,8 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.github.assisstion.InternetSpeedTest.scheduler.RepetitionScheduler;
+import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.InternetSpeedTest.web.WebConnector;
-import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 
 public class MainGUI extends JFrame{
 
@@ -231,9 +232,15 @@ public class MainGUI extends JFrame{
 
 			@Override
 			public void run(){
-				WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
-				wp.gui = MainGUI.this;
-				wp.process();
+				WebTimedProcess wtp = new WebTimedProcess();
+				wtp.gui = MainGUI.this;
+				new Thread(new RepetitionScheduler(100, 1000, wtp)).start();
+				/*
+				 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
+				 * wp.gui = MainGUI.this;
+				 * wp.process();
+				 */
+
 			}
 
 		}).start();

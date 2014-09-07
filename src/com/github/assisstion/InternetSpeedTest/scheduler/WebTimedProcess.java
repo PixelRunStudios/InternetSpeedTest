@@ -45,6 +45,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 		long startTime = System.currentTimeMillis();
 		System.out.println("Starting timed process at: " + startTime);
+		processor.timer = this;
+		processor.gui = gui;
 		processor.process();
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
