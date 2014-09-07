@@ -4,9 +4,9 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
-import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
-import com.github.assisstion.InternetSpeedTest.MathHelper;
+import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
+import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
 import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;

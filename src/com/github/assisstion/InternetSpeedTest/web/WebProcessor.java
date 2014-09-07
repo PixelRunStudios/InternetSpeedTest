@@ -11,9 +11,9 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
-import com.github.assisstion.InternetSpeedTest.MathHelper;
+import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
+import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.Shared.Pair;
 

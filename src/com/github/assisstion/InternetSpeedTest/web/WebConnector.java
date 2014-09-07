@@ -10,7 +10,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import com.github.assisstion.InternetSpeedTest.MainGUI;
-import com.github.assisstion.InternetSpeedTest.MathHelper;
+import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
 import com.github.assisstion.Shared.Pair;
 
 public class WebConnector {

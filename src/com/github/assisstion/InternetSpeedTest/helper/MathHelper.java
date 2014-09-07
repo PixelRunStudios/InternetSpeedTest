@@ -1,4 +1,4 @@
-package com.github.assisstion.InternetSpeedTest;
+package com.github.assisstion.InternetSpeedTest.helper;
 
 import java.text.DecimalFormat;
 

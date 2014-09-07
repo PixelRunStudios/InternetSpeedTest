@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import com.github.assisstion.InternetSpeedTest.FileHelper;
+import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
 import com.github.assisstion.InternetSpeedTest.web.WebConnector;
 
 //Use http://en.wikipedia.org/wiki/List_of_most_popular_websites
