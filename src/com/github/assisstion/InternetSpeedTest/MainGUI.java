@@ -203,7 +203,7 @@ public class MainGUI extends JFrame{
 
 		timePassed = new JLabel("N/A");
 		timePassed.setFont(new Font("Lucida Grande", Font.BOLD, 13));
-		timePassed.setBounds(342, 47, 61, 16);
+		timePassed.setBounds(342, 47, 99, 16);
 		contentPane.add(timePassed);
 
 		btnAbout = new JButton("?");
@@ -234,7 +234,7 @@ public class MainGUI extends JFrame{
 			public void run(){
 				WebTimedProcess wtp = new WebTimedProcess();
 				wtp.gui = MainGUI.this;
-				new Thread(new RepetitionScheduler(100, 1000, wtp)).start();
+				new Thread(new RepetitionScheduler(-1, 1000, wtp)).start();
 				/*
 				 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
 				 * wp.gui = MainGUI.this;

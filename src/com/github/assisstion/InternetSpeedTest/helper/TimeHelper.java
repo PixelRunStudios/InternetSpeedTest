@@ -15,17 +15,17 @@ public class TimeHelper{
 	public static String formatDuration(Duration dur, int digits){
 		long seconds = dur.getSeconds();
 		int nanos = dur.getNano();
-		long hours = seconds / 60;
-		int minutes = (int) (seconds % 60 / 60);
+		long hours = seconds / 3600;
+		int minutes = (int) (seconds % 3600 / 60);
 		int secs = (int) (seconds % 60);
 		String s = "";
 		if (hours != 0) {
 			s += hours + ":";
 		}
 		s += fillZeros(minutes, 2) + ":" + fillZeros(secs, 2);
-		if(nanos > 0){
-			s += "." + fillZeros((int) Math.round(nanos * 100000000L * Math.pow(10, digits)), digits);
-		}
+		//if(nanos > 0){
+		//	s += "." + fillZeros((int) Math.round(nanos * 100000000L * Math.pow(10, digits)), digits);
+		//}
 		return s;
 	}
 

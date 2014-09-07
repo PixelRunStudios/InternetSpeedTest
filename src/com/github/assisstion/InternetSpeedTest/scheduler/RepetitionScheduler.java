@@ -9,7 +9,7 @@ public class RepetitionScheduler implements Runnable{
 	protected Runnable runnable;
 
 	public static void main(String[] args){
-		new Thread(new RepetitionScheduler(100, 1000, new WebTimedProcess())).start();
+		new Thread(new RepetitionScheduler(-1, 1000, new WebTimedProcess())).start();
 	}
 
 	public RepetitionScheduler(long iterations, long delay, Runnable runnable){
