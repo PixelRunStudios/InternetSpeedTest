@@ -1,10 +1,12 @@
 package com.github.assisstion.InternetSpeedTest;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.SystemColor;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 public class HelpWindow extends JFrame{
@@ -33,12 +35,26 @@ public class HelpWindow extends JFrame{
 	 * Create the frame.
 	 */
 	public HelpWindow(){
+		setTitle("Help");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 287, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-	}
+		contentPane.setLayout(null);
 
+		JLabel lblInternetSpeedtester = new JLabel("Internet Speedtester");
+		lblInternetSpeedtester.setBounds(80, 50, 132, 16);
+		contentPane.add(lblInternetSpeedtester);
+
+		JLabel lblV = new JLabel("v1.0");
+		lblV.setBounds(125, 75, 34, 16);
+		contentPane.add(lblV);
+
+		JTextPane txtpnHi = new JTextPane();
+		txtpnHi.setBackground(SystemColor.window);
+		txtpnHi.setText("This is a simple program that tests your wifi ");
+		txtpnHi.setBounds(33, 116, 111, 16);
+		contentPane.add(txtpnHi);
+	}
 }
