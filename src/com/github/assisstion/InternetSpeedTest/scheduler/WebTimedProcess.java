@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.MathHelper;
 import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;
@@ -114,6 +115,6 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		long time = totalTime + info.getValueTwo();
 		gui.allKB.setText(String.valueOf(bytes / 1000));
 		gui.allTime.setText(String.valueOf(time / 1000.0));
-		gui.allSpeed.setText(String.valueOf((double) bytes / (double) time));
+		gui.allSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
 	}
 }

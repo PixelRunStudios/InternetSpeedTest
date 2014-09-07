@@ -4,24 +4,17 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.SwingWorker;
 
 import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.MathHelper;
 import com.github.assisstion.Shared.Pair;
 
 public class WebConnector {
 
-	public static double roundThreeDecimals(double d){
-		if(Double.isInfinite(d) || Double.isNaN(d)){
-			return d;
-		}
-		DecimalFormat threeDForm = new DecimalFormat("#.###");
-		return Double.valueOf(threeDForm.format(d));
-	}
 	/**
 	 * Gets the HTML representation of a webpage as a String
 	 * @param url the URL of the webpage
@@ -126,7 +119,7 @@ public class WebConnector {
 			long time = pair.getValueTwo() - startTime;
 			gui.siteKB.setText(String.valueOf(bytes / 1000));
 			gui.siteTime.setText(String.valueOf(time / 1000.0));
-			gui.speed.setText(String.valueOf(roundThreeDecimals((double) bytes / (double) time)));
+			gui.speed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
 			for(InfoSender<Pair<Pair<Long, Long>, Integer>> sender : senders){
 				sender.send(new Pair<Pair<Long, Long>, Integer>(new Pair<Long, Long>(bytes, time), attemptCount));
 			}

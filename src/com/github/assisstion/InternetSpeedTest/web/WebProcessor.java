@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -14,6 +13,7 @@ import java.util.Map;
 
 import com.github.assisstion.InternetSpeedTest.FileHelper;
 import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.MathHelper;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.Shared.Pair;
 
@@ -41,11 +41,6 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
 		wp.process();
-	}
-
-	public static double roundThreeDecimals(double d){
-		DecimalFormat threeDForm = new DecimalFormat("#.###");
-		return Double.valueOf(threeDForm.format(d));
 	}
 
 	public static Map<String, String> getWebsites(){
@@ -246,7 +241,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		gui.website.setText(currentName + "  ("+ counter +"/"+data.size()+")");
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
-		gui.cumulativeSpeed.setText(String.valueOf(roundThreeDecimals((double) bytes / (double) time)));
+		gui.cumulativeSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
 		if(timer != null){
 			timer.send(new Pair<Long, Long>(bytes, time));
 		}
