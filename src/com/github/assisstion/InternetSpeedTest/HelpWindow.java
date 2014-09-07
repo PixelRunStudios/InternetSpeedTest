@@ -9,6 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class HelpWindow extends JFrame{
 
@@ -59,6 +62,11 @@ public class HelpWindow extends JFrame{
 		txtpnHi.setBackground(SystemColor.window);
 		txtpnHi.setText("This is a simple program that tests your wifi speed by accessing the homepages of some of the most commonly accesse websites with servers in the US. You may change the list in the settings window.");
 		txtpnHi.setBounds(33, 123, 219, 130);
+
+		StyledDocument doc = txtpnHi.getStyledDocument();
+		SimpleAttributeSet center = new SimpleAttributeSet();
+		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
+		doc.setParagraphAttributes(0, doc.getLength(), center, false);
 		contentPane.add(txtpnHi);
 
 		JLabel lblMarkusFeng = new JLabel("© Markus Feng and Alex Guo");
