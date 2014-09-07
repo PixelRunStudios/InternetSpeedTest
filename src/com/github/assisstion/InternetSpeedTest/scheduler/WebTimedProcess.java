@@ -80,9 +80,10 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		processor.process();
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
+		double oldSpeed = (double) bytes / (double) time;
 		System.out.println("Total Bytes: " + bytes);
 		System.out.println("Total Time (ms): " + time);
-		System.out.println("Average Speed (KB/s): " + (double) bytes / (double) time);
+		System.out.println("Average Speed (KB/s): " + oldSpeed);
 		System.out.println();
 		totalTime += time;
 		totalBytes += bytes;
@@ -93,7 +94,7 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		double speed = (double) totalBytes / (double) totalTime;
 		System.out.println("Cumulative Average Speed (KB/s): " + speed);
 		System.out.println();
-		in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" + time + "\t" + speed + "\n";
+		in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" + time + "\t" + oldSpeed + "\n";
 
 		try{
 			FileHelper.write(file, in);
