@@ -203,7 +203,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				totalBytes += total.getValueOne();
 				totalTime += total.getValueTwo();
 			}
-
+			if(gui != null){
+				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo());
+			}
 			if(total.getValueOne() == 0){
 				return false;
 			}
@@ -241,7 +243,12 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		gui.website.setText(currentName + "  ("+ counter +"/"+data.size()+")");
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
-		gui.cumulativeSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
+		double speed = (double) bytes / (double) time;
+		gui.cumulativeSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals(speed)));
+
+		if(gui != null){
+			gui.graphWindow.timePanel.pushLine(speed);
+		}
 		if(timer != null){
 			timer.send(new Pair<Long, Long>(bytes, time));
 		}

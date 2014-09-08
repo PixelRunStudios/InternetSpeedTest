@@ -2,13 +2,18 @@ package com.github.assisstion.InternetSpeedTest;
 
 import javax.swing.JPanel;
 
-public class GraphPanel extends JPanel{
+public class LineGraphPanel extends JPanel{
 
 	/**
 	 * Create the panel.
 	 */
-	public GraphPanel(){
+	public LineGraphPanel(){
 
 	}
 
+
+
+	public void pushLine(double speed){
+
+	}
 }

@@ -34,7 +34,7 @@ public class MainGUI extends JFrame{
 	public JLabel allTime;
 	public JLabel allKB;
 	private JButton btnGetGraphs;
-	private GraphWindow window;
+	public GraphWindow graphWindow;
 	private HelpWindow helpWindow;
 	private SettingsWindow settingsWindow;
 	public JLabel timePassed;
@@ -64,7 +64,7 @@ public class MainGUI extends JFrame{
 	 */
 	public MainGUI(){
 		setTitle("Internet Speedester");
-		window = new GraphWindow();
+		graphWindow = new GraphWindow();
 		helpWindow = new HelpWindow();
 		settingsWindow = new SettingsWindow();
 
@@ -190,7 +190,7 @@ public class MainGUI extends JFrame{
 		btnGetGraphs.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				window.setVisible(true);
+				graphWindow.setVisible(true);
 			}
 		});
 		btnGetGraphs.setBounds(283, 10, 131, 29);

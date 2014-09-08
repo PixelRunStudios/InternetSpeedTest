@@ -11,6 +11,8 @@ import javax.swing.border.EmptyBorder;
 public class GraphWindow extends JFrame{
 
 	private JPanel contentPane;
+	public LineGraphPanel timePanel = new LineGraphPanel();
+	public BarGraphPanel sitePanel = new BarGraphPanel();
 
 	/**
 	 * Launch the application.
@@ -42,8 +44,8 @@ public class GraphWindow extends JFrame{
 		contentPane.setLayout(new BorderLayout(0, 0));
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.addTab("By Time", new GraphPanel());
-		tabbedPane.addTab("By Website", new GraphPanel());
+		tabbedPane.addTab("By Time", timePanel);
+		tabbedPane.addTab("By Website", sitePanel);
 
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 	}
