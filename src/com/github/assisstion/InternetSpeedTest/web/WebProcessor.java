@@ -247,7 +247,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		gui.cumulativeSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals(speed)));
 
 		if(gui != null){
-			gui.graphWindow.timePanel.pushLine(speed);
+			gui.graphWindow.timePanel.pushLine(System.currentTimeMillis(), speed);
 		}
 		if(timer != null){
 			timer.send(new Pair<Long, Long>(bytes, time));

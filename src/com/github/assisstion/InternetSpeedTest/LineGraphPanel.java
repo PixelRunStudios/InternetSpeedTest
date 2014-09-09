@@ -13,7 +13,7 @@ public class LineGraphPanel extends JPanel{
 
 
 
-	public void pushLine(double speed){
+	public void pushLine(long timeStamp, double speed){
 
 	}
 }
