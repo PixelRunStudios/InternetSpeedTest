@@ -18,6 +18,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 	public MainGUI gui;
 
+	protected boolean lastRunZero = false;
+
 	protected int run = 0;
 	protected long startTime = 0;
 
@@ -65,12 +67,14 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		});
 
 		String in = "";
-		try{
-			in = FileHelper.read(file);
-		}
-		catch(IOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(!lastRunZero){
+			try{
+				in = FileHelper.read(file);
+			}
+			catch(IOException e){
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		long startTime = System.currentTimeMillis();
@@ -94,17 +98,24 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		double speed = (double) totalBytes / (double) totalTime;
 		System.out.println("Cumulative Average Speed (KB/s): " + speed);
 		System.out.println();
-		in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" + time + "\t" + oldSpeed + "\n";
+		if(!lastRunZero){
+			in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" + time + "\t" + oldSpeed + "\n";
 
-		try{
-			FileHelper.write(file, in);
+			try{
+				FileHelper.write(file, in);
+			}
+			catch(IOException e){
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 		}
-		catch(IOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(bytes == 0 && time == 0){
+			lastRunZero = true;
 		}
-
-
+		else{
+			lastRunZero = false;
+		}
 	}
 
 	@Override
