@@ -1,6 +1,5 @@
 package com.github.assisstion.InternetSpeedTest;
 
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.SystemColor;
 
@@ -15,25 +14,11 @@ import javax.swing.text.StyledDocument;
 
 public class HelpWindow extends JFrame{
 
-	private JPanel contentPane;
-
 	/**
-	 * Launch the application.
+	 *
 	 */
-	public static void main(String[] args){
-		EventQueue.invokeLater(new Runnable(){
-			@Override
-			public void run(){
-				try{
-					HelpWindow frame = new HelpWindow();
-					frame.setVisible(true);
-				}
-				catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private static final long serialVersionUID = 1103802825109750751L;
+	private JPanel contentPane;
 
 	/**
 	 * Create the frame.

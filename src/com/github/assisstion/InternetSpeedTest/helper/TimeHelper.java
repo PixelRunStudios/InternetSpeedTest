@@ -14,7 +14,7 @@ public class TimeHelper{
 
 	public static String formatDuration(Duration dur, int digits){
 		long seconds = dur.getSeconds();
-		int nanos = dur.getNano();
+		//int nanos = dur.getNano();
 		long hours = seconds / 3600;
 		int minutes = (int) (seconds % 3600 / 60);
 		int secs = (int) (seconds % 60);

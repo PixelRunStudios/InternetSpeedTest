@@ -5,6 +5,12 @@ import javax.swing.JPanel;
 public class BarGraphPanel extends JPanel{
 
 	/**
+	 *
+	 */
+	private static final long serialVersionUID = -509125879716516235L;
+
+
+	/**
 	 * Create the panel.
 	 */
 	public BarGraphPanel(){
