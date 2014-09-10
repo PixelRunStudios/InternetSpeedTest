@@ -14,6 +14,8 @@ public class BarGraphPanel extends JPanel{
 	public static String site1;
 	public static long bytes1;
 	public static long loadingTime1;
+	public  int counter = 0;
+	public  int siteP = 0;
 
 
 	/**
@@ -26,18 +28,23 @@ public class BarGraphPanel extends JPanel{
 	@Override
 	public void paint(Graphics g) {
 		g.setColor(Color.blue);
-		g.fillRect(50, 30, 200, 380);
+		//g.fillRect(50, 30, 200, 380);
 		g.setColor(Color.black);
-		g.drawLine(50, 390, 700, 390);
-		g.drawLine(50, 30, 50, 390);
+		g.drawRect(50, 30, 850, 360);
+		for(int i = 0; i<counter;i++){
+			g.drawLine(50+siteP*(i+1),390, 50+siteP*(i+1), 380);
+
+		}
 
 	}
 
 
 	public void pushBar(String site, long bytes, long loadingTime){
+		counter++;
 		site1 =site;
 		bytes1 = bytes;
 		loadingTime1 = loadingTime;
+		siteP = 850/counter;
 		repaint();
 	}
 }

@@ -205,6 +205,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			}
 			if(gui != null){
 				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo());
+				System.out.println(name);
 			}
 			if(total.getValueOne() == 0){
 				return false;
