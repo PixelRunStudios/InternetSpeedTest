@@ -15,12 +15,8 @@ import com.github.assisstion.Shared.Pair;
 
 public class BarGraphPanel extends JPanel{
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -509125879716516235L;
 	private int xElements = 0;
-	private int currentXElement = 0;
 	private int siteP = 0;
 
 	private static final int TOP_Y = 30;
@@ -31,10 +27,9 @@ public class BarGraphPanel extends JPanel{
 	private static final int MARKER_LENGTH = 10;
 	private static final int DIST_FROM_MARKER = 2;
 
-	//private int min = 0;
 	private long max = 0;
 	private static final int CAP = 200;
-	int markerAmount = 0;
+	private int markerAmount = 0;
 
 
 	public LinkedHashMap<String, Pair<Long, Long>> speeds = new LinkedHashMap<String, Pair<Long, Long>>();
@@ -158,15 +153,6 @@ public class BarGraphPanel extends JPanel{
 			}
 		}
 		repaint();
-		if(currentXElement < sites - 1){
-			currentXElement++;
-		}
-		else if(currentXElement == sites - 1){
-			currentXElement = 0;
-		}
-		else{
-			currentXElement = 0;
-		}
 
 	}
 }
