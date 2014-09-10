@@ -23,6 +23,8 @@ public class GraphWindow extends JFrame{
 	 * Create the frame.
 	 */
 	public GraphWindow(){
+		setTitle("Graph Window");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 500);
 		contentPane = new JPanel();
