@@ -2,10 +2,16 @@ package com.github.assisstion.InternetSpeedTest;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import com.github.assisstion.Shared.Pair;
 
 public class BarGraphPanel extends JPanel{
 
@@ -13,29 +19,27 @@ public class BarGraphPanel extends JPanel{
 	 *
 	 */
 	private static final long serialVersionUID = -509125879716516235L;
-	public static long speed;
-	public  int counter = 0;
-	public int counter2 = 0;
-	public int counter3 = 1;
-	public  int siteP = 0;
+	public int xElements = 0;
+	public int currentXElement = 0;
+	public int numberRuns = 1;
+	public int siteP = 0;
 	public int numSites = 0;
 
-	public int topY = 30;
-	public int bottomY = 390;
-	public int leftX = 50;
-	public int rightX = 920;
+	public static final int TOP_Y = 30;
+	public static final int BOTTOM_Y = 390;
+	public static final int LEFT_X = 50;
+	public static final int RIGHT_X = 920;
 
-	private int markerLength = 10;
-	private int distFromMarker = 2;
+	private static final int MARKER_LENGTH = 10;
+	private static final int DIST_FROM_MARKER = 2;
 
-	private int min = 0;
+	//private int min = 0;
 	private long max = 0;
 	private long cap = 200;
 	int markerAmount = 0;
 
 
-	public ArrayList<String> websites = new ArrayList<String>();
-	public ArrayList<Long> speeds = new ArrayList<Long>();
+	public LinkedHashMap<String, Pair<Long, Long>> speeds = new LinkedHashMap<String, Pair<Long, Long>>();
 
 	/**
 	 * Create the panel.
@@ -54,23 +58,46 @@ public class BarGraphPanel extends JPanel{
 		g.setColor(Color.blue);
 		//g.fillRect(50, 30, 200, 380);
 		g.setColor(Color.black);
-		g.drawRect(leftX, topY, rightX-leftX, bottomY-topY);
-		for(int i = 0; i<counter-1;i++){
+		g.drawRect(LEFT_X, TOP_Y, RIGHT_X-LEFT_X, BOTTOM_Y-TOP_Y);
+		for(int i = 0; i<xElements-1;i++){
 			g.setColor(Color.black);
-			g.drawLine(leftX+siteP*(i+1),bottomY, leftX+siteP*(i+1), bottomY+markerLength);
+			g.drawLine(LEFT_X+siteP*(i+1),BOTTOM_Y, LEFT_X+siteP*(i+1), BOTTOM_Y+MARKER_LENGTH);
 
-			System.out.println(speed);
 		}
-		for(int i = 0; i<counter; i++){
+		int i = 0;
+		for(Map.Entry<String, Pair<Long, Long>> entry : speeds.entrySet()){
 			g.setColor(Color.blue);
-			if(speeds.get(i) != 0){
-				System.out.println("hi1: "+ speeds.get(i));
-				System.out.println("hi: "+(int)((bottomY-topY)/((max+cap)*1.0/speeds.get(i))));
-				System.out.println("max = "+max);
-				g.drawString(websites.get(i), leftX+siteP*i+distFromMarker, bottomY+20);
 
-				g.fillRect(leftX+siteP*i+distFromMarker, bottomY - (int)((bottomY-topY)/((max+cap)*1.0/speeds.get(i))), siteP-2*distFromMarker, (int)((bottomY-topY)/((max+cap)*1.0/speeds.get(i))));
+			//System.out.println("hi1: "+ speeds.get(i));
+			//System.out.println("hi: "+(int)((BOTTOM_Y-TOP_Y)/((max+cap)*1.0/speeds.get(i))));
+			//System.out.println("max = "+max);
+			Graphics2D g2d = (Graphics2D) g;
+			//AffineTransform form = new AffineTransform();
+			//form.rotate(-Math.PI / 2);
+			//Font font = g2d.getFont();
+			//Font x = font.deriveFont(form);
+			//g2d.setFont(x);
+			g2d.setColor(Color.BLACK);
+			AffineTransform form = new AffineTransform();
+			form.rotate(-Math.PI / 2, getWidth()/2, getHeight()/2);
+			g2d.transform(form);
+			//g2d.drawString(entry.getKey(), LEFT_X+siteP*i+DIST_FROM_MARKER, BOTTOM_Y+20);
+			g2d.drawString(entry.getKey(), BOTTOM_Y+20-150, LEFT_X+siteP*i+DIST_FROM_MARKER - 205);
+			try{
+				g2d.transform(form.createInverse());
 			}
+			catch(NoninvertibleTransformException e){
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			g2d.setColor(Color.BLUE);
+			//g2d.setFont(font);
+			if(entry.getValue().getValueOne() != 0 && entry.getValue().getValueTwo() != 0){
+				long speedNow = entry.getValue().getValueOne() / entry.getValue().getValueTwo();
+
+				g.fillRect(LEFT_X+siteP*i+DIST_FROM_MARKER, BOTTOM_Y - (int)((BOTTOM_Y-TOP_Y)/((double)(max+cap)/speedNow)), siteP-2*DIST_FROM_MARKER, (int)((BOTTOM_Y-TOP_Y)/((double)(max+cap)/speedNow)));
+			}
+			i++;
 		}
 		if(max+cap >0 && max+ cap <=25){
 			markerAmount = 5;
@@ -101,62 +128,59 @@ public class BarGraphPanel extends JPanel{
 		}
 		g.setColor(Color.black);
 
+		int counter = 0;
 		for(int j = 0; j<max+cap+1; j+=markerAmount){
-			System.out.println("j = "+j);
-			g.drawLine(leftX, (int) (topY + j*((bottomY-topY)/((max+cap)/markerAmount))), leftX + markerLength, (int)(topY + j*((bottomY-topY)/((max+cap)/markerAmount))));
-			g.drawString(""+ (max+cap-j), leftX-25, (int) (topY + j*((bottomY-topY)/((max+cap)/markerAmount))));
+			//System.out.println("mc = " + (max + cap));
+			//System.out.println("j = " + j);
+			g.drawLine(LEFT_X, (int) (TOP_Y + j*((BOTTOM_Y-TOP_Y)/((max+cap)/markerAmount))), LEFT_X + MARKER_LENGTH, (int)(TOP_Y + j*((BOTTOM_Y-TOP_Y)/((max+cap)/markerAmount))));
+			g.drawString(""+ (max+cap-j), LEFT_X-25, (int) (TOP_Y + counter++*((BOTTOM_Y-TOP_Y)/((double)(max+cap)/markerAmount))));
 		}
 	}
 
 
 	public void pushBar(String site, long bytes, long loadingTime, int sites){
-		System.out.println(speeds.size());
+		//System.out.println(speeds.size());
 
-		if(counter<sites){
-			counter++;
+		if(xElements<sites){
+			xElements++;
 		}
-		if(loadingTime !=0){
-			if(speeds.size()>counter2 || counter2 == sites){
-				System.out.println("counter2: " + counter2);
-				speed = (speeds.get(counter2)*counter3 + bytes/loadingTime)/(counter3+1);
-			}
-			else{
-				speed = bytes/loadingTime;
-			}
-
+		if(speeds.get(site) != null){
+			//System.out.println("counter2: " + currentXElement);
+			Pair<Long, Long> pair = speeds.get(site);
+			speeds.put(site, new Pair<Long, Long>(
+					pair.getValueOne() + bytes, pair.getValueTwo() + loadingTime));
 		}
 		else{
-			speed = 0;
+			speeds.put(site, new Pair<Long, Long>(
+					bytes, loadingTime));
 		}
-		System.out.println(sites);
-		System.out.println(counter2);
-		System.out.println(speeds.size());
+		//System.out.println(sites);
+		//System.out.println(currentXElement);
+		//System.out.println(speeds.size());
 		numSites = sites;
-		siteP = (rightX-leftX)/counter;
-		if(speeds.size()>counter2 || counter2 == sites){
-			websites.set(counter2, site);
-			speeds.set(counter2, speed);
-		} else{
-			websites.add(site);
-			speeds.add(speed);
-		}
+		siteP = (RIGHT_X-LEFT_X)/xElements;
 		max=0;
-		for(int i = 0; i<speeds.size();i++){
-			long temp = speeds.get(i);
+		for(Map.Entry<String, Pair<Long, Long>> entry : speeds.entrySet()){
+			Pair<Long, Long> pair = entry.getValue();
+			if(pair.getValueTwo() == 0){
+				continue;
+			}
+			long temp = pair.getValueOne() / pair.getValueTwo();
 			if(temp>max){
 				max = temp;
 			}
 		}
 		repaint();
-		if(counter2<sites-1){
-			counter2++;
+		if(currentXElement<sites-1){
+			currentXElement++;
 		}
-		else if(counter2 ==sites-1){
-			counter3++;
-			counter2 = 0;
+		else if(currentXElement ==sites-1){
+			numberRuns++;
+			currentXElement = 0;
 		}
 		else{
-			counter2 = 0;
+			currentXElement = 0;
 		}
+
 	}
 }

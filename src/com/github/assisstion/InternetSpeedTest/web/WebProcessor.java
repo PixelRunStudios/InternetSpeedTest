@@ -209,7 +209,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			}
 			if(gui != null){
 				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo(), numSites());
-				System.out.println(name);
+				if(!silent){
+					System.out.println(name);
+				}
 			}
 			if(!silent){
 				System.out.println("Bytes: " + total.getValueOne());
@@ -225,6 +227,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			if(!silent){
 				System.out.println("Site unavailable! Trying next one.");
 				System.out.println();
+			}
+			else{
+				System.out.println("SU!");
 			}
 			return false;
 		}
