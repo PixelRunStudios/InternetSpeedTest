@@ -203,12 +203,13 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				totalBytes += total.getValueOne();
 				totalTime += total.getValueTwo();
 			}
-			if(gui != null){
-				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo());
-				System.out.println(name);
-			}
+
 			if(total.getValueOne() == 0){
 				return false;
+			}
+			if(gui != null){
+				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo(), numSites());
+				System.out.println(name);
 			}
 			if(!silent){
 				System.out.println("Bytes: " + total.getValueOne());
@@ -253,5 +254,10 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		if(timer != null){
 			timer.send(new Pair<Long, Long>(bytes, time));
 		}
+	}
+
+
+	public int numSites(){
+		return data.size();
 	}
 }
