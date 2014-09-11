@@ -58,8 +58,14 @@ public class BarGraphPanel extends JPanel{
 			g2d.setColor(Color.BLACK);
 			AffineTransform form = new AffineTransform();
 			form.rotate(-Math.PI / 2, getWidth()/2, getHeight()/2);
+			//form.rotate(-Math.PI / 2,  LEFT_X+siteP*i+DIST_FROM_MARKER, BOTTOM_Y+20);
 			g2d.transform(form);
+<<<<<<< HEAD
 			g2d.drawString(entry.getKey(), BOTTOM_Y+20-150, LEFT_X+siteP()*i+DIST_FROM_MARKER - 205);
+=======
+			g2d.drawString(entry.getKey(), BOTTOM_Y+20-150, LEFT_X+siteP*i+DIST_FROM_MARKER - 205);
+			//g2d.drawString(entry.getKey(), BOTTOM_Y+20, LEFT_X+siteP*i+DIST_FROM_MARKER);
+>>>>>>> FETCH_HEAD
 			try{
 				g2d.transform(form.createInverse());
 			}
@@ -119,7 +125,11 @@ public class BarGraphPanel extends JPanel{
 			g.drawLine(LEFT_X, (int) (TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))), LEFT_X + MARKER_LENGTH, (int)(TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))));
 			g.drawString(String.valueOf(getMax()-j), LEFT_X - 32, (int) (TOP_Y + counter++*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()));
 		}
+<<<<<<< HEAD
 		g.drawString(String.valueOf(getMax()), LEFT_X + 2, (int) (TOP_Y + getGraphHeight()/((double)getMax()/markerAmount())) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()) - (int)(markerAmount()/(double)getMax()*getGraphHeight()));
+=======
+		g.drawString(String.valueOf(getMax()), LEFT_X + 5, (int) (TOP_Y + getGraphHeight()/((double)getMax()/markerAmount)) + (int)(getMax() % markerAmount/(double)getMax()*getGraphHeight()) - (int)(markerAmount/(double)getMax()*getGraphHeight()));
+>>>>>>> FETCH_HEAD
 	}
 
 
