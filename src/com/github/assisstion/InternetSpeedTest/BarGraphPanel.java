@@ -16,8 +16,6 @@ import com.github.assisstion.Shared.Pair;
 public class BarGraphPanel extends JPanel{
 
 	private static final long serialVersionUID = -509125879716516235L;
-	private int xElements = 0;
-	private int siteP = 0;
 
 	private static final int TOP_Y = 30;
 	private static final int BOTTOM_Y = 390;
@@ -29,7 +27,6 @@ public class BarGraphPanel extends JPanel{
 
 	private long max = 0;
 	private static final int CAP = 200;
-	private int markerAmount = 0;
 
 
 	public LinkedHashMap<String, Pair<Long, Long>> speeds = new LinkedHashMap<String, Pair<Long, Long>>();
@@ -50,8 +47,8 @@ public class BarGraphPanel extends JPanel{
 	public void paint(Graphics g) {
 		g.setColor(Color.BLACK);
 		g.drawRect(LEFT_X, TOP_Y, getGraphWidth(), getGraphHeight());
-		for(int i = 0; i < xElements - 1;i++){
-			int x = LEFT_X + siteP * (i+1);
+		for(int i = 0; i < elements() - 1;i++){
+			int x = LEFT_X + siteP() * (i+1);
 			g.drawLine(x, BOTTOM_Y, x, BOTTOM_Y+MARKER_LENGTH);
 
 		}
@@ -62,7 +59,7 @@ public class BarGraphPanel extends JPanel{
 			AffineTransform form = new AffineTransform();
 			form.rotate(-Math.PI / 2, getWidth()/2, getHeight()/2);
 			g2d.transform(form);
-			g2d.drawString(entry.getKey(), BOTTOM_Y+20-150, LEFT_X+siteP*i+DIST_FROM_MARKER - 205);
+			g2d.drawString(entry.getKey(), BOTTOM_Y+20-150, LEFT_X+siteP()*i+DIST_FROM_MARKER - 205);
 			try{
 				g2d.transform(form.createInverse());
 			}
@@ -74,11 +71,11 @@ public class BarGraphPanel extends JPanel{
 			if(entry.getValue().getValueOne() != 0 && entry.getValue().getValueTwo() != 0){
 				long speedNow = entry.getValue().getValueOne() / entry.getValue().getValueTwo();
 
-				g.fillRect(LEFT_X+siteP*i+DIST_FROM_MARKER, BOTTOM_Y - (int)(getGraphHeight()/((double)getMax()/speedNow)), siteP-2*DIST_FROM_MARKER, (int)(getGraphHeight()/((double)getMax()/speedNow)));
+				g.fillRect(LEFT_X+siteP()*i+DIST_FROM_MARKER, BOTTOM_Y - (int)(getGraphHeight()/((double)getMax()/speedNow)), siteP()-2*DIST_FROM_MARKER, (int)(getGraphHeight()/((double)getMax()/speedNow)));
 			}
 			i++;
 		}
-		markerAmount = (int)getMax() / 50 * 5;
+		//markerAmount = (int)getMax() / 50 * 5;
 		/*
 		if(getMax() >0 && max+ CAP <=25){
 			markerAmount = 5;
@@ -118,19 +115,19 @@ public class BarGraphPanel extends JPanel{
 		}
 		 */
 
-		for(int j = (int)getMax() % markerAmount; j <= getMax(); j+=markerAmount){
-			g.drawLine(LEFT_X, (int) (TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount))), LEFT_X + MARKER_LENGTH, (int)(TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount))));
-			g.drawString(String.valueOf(getMax()-j), LEFT_X - 32, (int) (TOP_Y + counter++*(getGraphHeight()/((double)getMax()/markerAmount))) + (int)(getMax() % markerAmount/(double)getMax()*getGraphHeight()));
+		for(int j = (int)getMax() % markerAmount(); j <= getMax(); j+=markerAmount()){
+			g.drawLine(LEFT_X, (int) (TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))), LEFT_X + MARKER_LENGTH, (int)(TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))));
+			g.drawString(String.valueOf(getMax()-j), LEFT_X - 32, (int) (TOP_Y + counter++*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()));
 		}
-		g.drawString(String.valueOf(getMax()), LEFT_X + 2, (int) (TOP_Y + getGraphHeight()/((double)getMax()/markerAmount)) + (int)(getMax() % markerAmount/(double)getMax()*getGraphHeight()) - (int)(markerAmount/(double)getMax()*getGraphHeight()));
+		g.drawString(String.valueOf(getMax()), LEFT_X + 2, (int) (TOP_Y + getGraphHeight()/((double)getMax()/markerAmount())) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()) - (int)(markerAmount()/(double)getMax()*getGraphHeight()));
 	}
 
 
 	public void pushBar(String site, long bytes, long loadingTime, int sites){
 
-		if(xElements < sites){
-			xElements++;
-		}
+		//if(xElements < sites){
+		//	xElements++;
+		//}
 		if(speeds.get(site) != null){
 			Pair<Long, Long> pair = speeds.get(site);
 			speeds.put(site, new Pair<Long, Long>(
@@ -140,7 +137,7 @@ public class BarGraphPanel extends JPanel{
 			speeds.put(site, new Pair<Long, Long>(
 					bytes, loadingTime));
 		}
-		siteP = getGraphWidth() / xElements;
+		//siteP = getGraphWidth() / elements();
 		max = 0;
 		for(Map.Entry<String, Pair<Long, Long>> entry : speeds.entrySet()){
 			Pair<Long, Long> pair = entry.getValue();
@@ -166,5 +163,17 @@ public class BarGraphPanel extends JPanel{
 
 	public long getMax(){
 		return max + CAP;
+	}
+
+	public int elements(){
+		return speeds.size();
+	}
+
+	public int siteP(){
+		return getGraphWidth() / elements();
+	}
+
+	public int markerAmount(){
+		return (int)getMax() / 50 * 5;
 	}
 }
