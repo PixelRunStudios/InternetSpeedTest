@@ -2,11 +2,15 @@ package com.github.assisstion.InternetSpeedTest;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class LineGraphPanel extends JPanel{
 
@@ -25,23 +29,102 @@ public class LineGraphPanel extends JPanel{
 	private int valuesPerPoint = 1;
 	private int pixelInterval = 2;
 	private int max = 0;
+	private JTextField textField;
+	private JTextField textField_1;
+	private JButton btnMoveDisplay;
+	private JButton btnUseAutomove;
+	private boolean automove = true;
+	private int movePosition = 0;
 
 	/**
 	 * Create the panel.
 	 */
 	public LineGraphPanel(){
+		setLayout(null);
+
+		JButton btnSetValue = new JButton("Set Point Interval");
+		btnSetValue.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					valuesPerPoint = Integer.parseInt(textField.getText());
+					repaint();
+				}
+				catch(NumberFormatException nfe){
+					System.out.println("Input not a number!");
+				}
+			}
+		});
+		btnSetValue.setBounds(50, 0, 150, 29);
+		add(btnSetValue);
+
+		textField = new JTextField();
+		textField.setText("1");
+		textField.setBounds(0, 0, 40, 28);
+		add(textField);
+		textField.setColumns(2);
+
+		textField_1 = new JTextField();
+		textField_1.setText("0");
+		textField_1.setBounds(215, 0, 80, 28);
+		add(textField_1);
+		textField_1.setColumns(10);
+
+		btnMoveDisplay = new JButton("Set Display Position");
+		btnMoveDisplay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					automove = false;
+					movePosition = Integer.parseInt(textField_1.getText());
+					repaint();
+				}
+				catch(NumberFormatException nfe){
+					System.out.println("Input not a number!");
+				}
+			}
+		});
+		btnMoveDisplay.setBounds(300, 0, 180, 29);
+		add(btnMoveDisplay);
+
+		btnUseAutomove = new JButton("Use Automove");
+		btnUseAutomove.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				automove = true;
+				repaint();
+			}
+		});
+		btnUseAutomove.setBounds(500, 0, 150, 29);
+		add(btnUseAutomove);
 
 	}
 
 	@Override
 	public void paint(Graphics g){
+		super.paint(g);
 		g.setColor(Color.BLACK);
 		g.drawRect(LEFT_X, TOP_Y, getGraphWidth(), getGraphHeight());
-		int size = getGraphWidth() / pixelInterval;
+		int size = getGraphWidth() / pixelInterval * valuesPerPoint;
 		ArrayList<Double> points = new ArrayList<Double>(size / valuesPerPoint);
 		Map.Entry<Long, Double> entry = data.lastEntry();
 		int speedStack = 0;
 		int speedStackCount = 0;
+		int moveAmount = 0;
+		if(!automove){
+			moveAmount += data.size() -
+					(movePosition + getGraphWidth()) / pixelInterval * valuesPerPoint;
+			//moveAmount += movePosition;
+		}
+		moveAmount = moveAmount - moveAmount % valuesPerPoint +
+				data.size() % valuesPerPoint;
+		System.out.println(moveAmount);
+		for(int i = 0; i < moveAmount; i++){
+			if(entry == null){
+				break;
+			}
+			entry = data.lowerEntry(entry.getKey());
+		}
 		for(int i = 0; i < size; i++){
 			if(entry == null){
 				break;
@@ -67,8 +150,6 @@ public class LineGraphPanel extends JPanel{
 			int y = BOTTOM_Y;
 			if(hasLast){
 				y = BOTTOM_Y - (int) (value * getGraphHeight() / max);
-				System.out.println("X:" + (lastX + 2));
-				System.out.println(y);
 				g.drawLine(lastX, lastY, lastX + 2, y);
 			}
 			lastX = lastX + 2;
