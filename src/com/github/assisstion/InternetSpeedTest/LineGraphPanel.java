@@ -118,7 +118,10 @@ public class LineGraphPanel extends JPanel{
 		}
 		moveAmount = moveAmount - moveAmount % valuesPerPoint +
 				data.size() % valuesPerPoint;
-		System.out.println(moveAmount);
+		if(moveAmount < 0){
+			moveAmount = data.size() % valuesPerPoint;
+		}
+		//System.out.println(moveAmount);
 		for(int i = 0; i < moveAmount; i++){
 			if(entry == null){
 				break;
