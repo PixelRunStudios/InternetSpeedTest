@@ -50,4 +50,13 @@ public class TimeHelper{
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
 		return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
 	}
+
+	public static String formatSystemTimeCompact(long millis){
+		String s = formatSystemTime(millis);
+		s = s.substring(5);
+		s = s.split("\\.")[0];
+		s = s.replace('-', '/');
+		s = s.replace('T', ' ');
+		return s;
+	}
 }

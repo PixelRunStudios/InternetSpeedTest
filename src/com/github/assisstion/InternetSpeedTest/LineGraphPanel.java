@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.github.assisstion.InternetSpeedTest.helper.TimeHelper;
+
 public class LineGraphPanel extends JPanel{
 
 	/**
@@ -35,6 +37,7 @@ public class LineGraphPanel extends JPanel{
 	private JButton btnUseAutomove;
 	private boolean automove = true;
 	private int movePosition = 0;
+	private static final int LABELS = 6;
 
 	/**
 	 * Create the panel.
@@ -158,6 +161,30 @@ public class LineGraphPanel extends JPanel{
 			lastX = lastX + 2;
 			lastY = y;
 			hasLast = true;
+		}
+		int off = size / LABELS;
+		Map.Entry<Long, Double> entryX;
+		if(entry == null){
+			entryX = data.firstEntry();
+		}
+		else{
+			entryX = entry;
+		}
+		out: for(int i = 0; i < LABELS; i++){
+			if(entryX == null){
+				break out;
+			}
+			int x = LEFT_X + getGraphWidth() / LABELS * i;
+			g.drawLine(x, BOTTOM_Y, x, BOTTOM_Y + 15);
+			g.drawLine(x + 1, BOTTOM_Y, x + 1, BOTTOM_Y + 15);
+			g.drawString(TimeHelper.formatSystemTimeCompact(entryX.getKey()),
+					x, BOTTOM_Y + 30);
+			for(int j = 0; j < off; j++){
+				if(entryX == null){
+					break out;
+				}
+				entryX = data.higherEntry(entryX.getKey());
+			}
 		}
 	}
 
