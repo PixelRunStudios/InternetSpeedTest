@@ -185,7 +185,7 @@ public class MainGUI extends JFrame{
 		allKB.setBounds(380, 117, 61, 16);
 		contentPane.add(allKB);
 
-		btnGetGraphs = new JButton("GET GRAPHS");
+		btnGetGraphs = new JButton("Graphs");
 		btnGetGraphs.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		btnGetGraphs.addActionListener(new ActionListener() {
 			@Override
@@ -193,10 +193,10 @@ public class MainGUI extends JFrame{
 				graphWindow.setVisible(true);
 			}
 		});
-		btnGetGraphs.setBounds(283, 10, 131, 29);
+		btnGetGraphs.setBounds(336, 10, 78, 29);
 		contentPane.add(btnGetGraphs);
 
-		JLabel lblTimePassed = new JLabel("Time Passed:");
+		JLabel lblTimePassed = new JLabel("Total Time:");
 		lblTimePassed.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblTimePassed.setBounds(229, 47, 116, 16);
 		contentPane.add(lblTimePassed);
@@ -227,6 +227,36 @@ public class MainGUI extends JFrame{
 		btnSettings.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		btnSettings.setBounds(50, 10, 88, 29);
 		contentPane.add(btnSettings);
+
+		JButton btnStart = new JButton("Start");
+		btnStart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnStart.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		btnStart.setBounds(142, 10, 51, 29);
+		contentPane.add(btnStart);
+
+		JButton btnStop = new JButton("Stop");
+		btnStop.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnStop.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		btnStop.setBounds(185, 10, 51, 29);
+		contentPane.add(btnStop);
+
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnClear.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		btnClear.setBounds(229, 10, 61, 29);
+		contentPane.add(btnClear);
 
 		new Thread(new Runnable(){
 
