@@ -42,6 +42,7 @@ public class MainGUI extends JFrame{
 	private JButton btnSettings;
 	private WebTimedProcess wtp;
 	private boolean toBeCleared;
+	private boolean started = false;
 
 	/**
 	 * Launch the application.
@@ -234,7 +235,13 @@ public class MainGUI extends JFrame{
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				wtp.setPaused(false);
+				if(!started){
+					started = true;
+					new Thread(getRunnable()).start();
+				}
+				else{
+					wtp.setPaused(false);
+				}
 			}
 		});
 		btnStart.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
@@ -267,8 +274,6 @@ public class MainGUI extends JFrame{
 		btnClear.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		btnClear.setBounds(229, 10, 61, 29);
 		contentPane.add(btnClear);
-
-		new Thread(getRunnable()).start();
 	}
 
 	public Runnable getRunnable(){
@@ -278,7 +283,7 @@ public class MainGUI extends JFrame{
 			public void run(){
 				wtp = new WebTimedProcess();
 				wtp.gui = MainGUI.this;
-				wtp.setPaused(true);
+				wtp.setPaused(false);
 				new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp)).start();
 
 				/*
@@ -345,6 +350,6 @@ public class MainGUI extends JFrame{
 		allTime.setText("N/A");
 		allKB.setText("N/A");
 		timePassed.setText("N/A");
-		new Thread(getRunnable()).start();
+		started = false;
 	}
 }

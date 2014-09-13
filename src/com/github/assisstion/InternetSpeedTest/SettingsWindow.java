@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
@@ -28,18 +29,20 @@ public class SettingsWindow extends JFrame{
 	public SettingsWindow(){
 		setTitle("Settings");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 360, 316);
+		setBounds(100, 100, 360, 520);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(25, 70, 301, 400);
+		contentPane.add(scrollPane);
+
 		JTextPane textPane = new JTextPane();
+		scrollPane.setViewportView(textPane);
 
 		textPane.setText(load(new File("websites.txt")));
-
-		textPane.setBounds(25, 70, 305, 200);
-		contentPane.add(textPane);
 
 		JButton btnOpen = new JButton("Load");
 		btnOpen.addActionListener(new ActionListener() {
