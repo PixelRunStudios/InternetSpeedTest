@@ -59,6 +59,9 @@ public class LineGraphPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try{
 					valuesPerPoint = Integer.parseInt(textField.getText());
+					if(valuesPerPoint <= 0){
+						valuesPerPoint = 1;
+					}
 					repaint();
 				}
 				catch(NumberFormatException nfe){
@@ -236,6 +239,9 @@ public class LineGraphPanel extends JPanel{
 	}
 
 	public void pushLine(long timeStamp, double speed){
+		if(Double.isInfinite(speed)){
+			return;
+		}
 		data.put(timeStamp, speed);
 
 		repaint();

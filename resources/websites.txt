@@ -37,6 +37,4 @@ Wordpress	http://www.wordpress.org
 Netflix	http://www.netflix.com
 ESPN.com	http://www.espn.go.com
 Dailymotion	http://www.dailymotion.com
-RevenueHits	http://www.Clkmon.com
 About.com	http://www.about.com
-Blogspot	http://www.bp.blogspot.com
