@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -44,6 +45,7 @@ public class LineGraphPanel extends JPanel{
 	private static final int ADDITION = 2;
 
 	private ArrayList<Long> ends = new ArrayList<Long>();
+	private JCheckBox chckbxHideRunLines;
 
 	/**
 	 * Create the panel.
@@ -107,14 +109,17 @@ public class LineGraphPanel extends JPanel{
 		btnUseAutomove.setBounds(796, 0, 130, 29);
 		add(btnUseAutomove);
 
+		chckbxHideRunLines = new JCheckBox("Hide Run Lines");
+		chckbxHideRunLines.setBounds(260, 1, 128, 23);
+		add(chckbxHideRunLines);
+
 	}
 
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
 		if(data.size()>0){
-			g.drawString("Last Update: ",270,18);
-			g.drawString(TimeHelper.formatSystemTimeCompact(data.lastEntry().getKey()), 360, 18);
+			g.drawString("Last Update: " + TimeHelper.formatSystemTimeCompact(data.lastEntry().getKey()), LEFT_X + 10, TOP_Y + 20);
 		}
 		g.setColor(Color.BLACK);
 		g.drawRect(LEFT_X, TOP_Y, getGraphWidth(), getGraphHeight());
@@ -176,10 +181,12 @@ public class LineGraphPanel extends JPanel{
 				g.setColor(Color.blue);
 				g.drawLine(lastX, lastY, lastX + ADDITION, y);
 			}
-			if(points.get(points.size() - i - 1).getValueTwo()){
-				g.setColor(Color.DARK_GRAY);
-				g.drawLine(lastX+ADDITION, TOP_Y, lastX+ADDITION, BOTTOM_Y);
-				g.setColor(Color.black);
+			if(!chckbxHideRunLines.isSelected()){
+				if(points.get(points.size() - i - 1).getValueTwo()){
+					g.setColor(Color.DARK_GRAY);
+					g.drawLine(lastX+ADDITION, TOP_Y, lastX+ADDITION, BOTTOM_Y);
+					g.setColor(Color.black);
+				}
 			}
 			lastX = lastX + ADDITION;
 			lastY = y;
