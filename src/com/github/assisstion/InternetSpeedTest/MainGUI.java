@@ -4,8 +4,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,7 +13,6 @@ import javax.swing.border.EmptyBorder;
 
 import com.github.assisstion.InternetSpeedTest.scheduler.RepetitionScheduler;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
-import com.github.assisstion.InternetSpeedTest.web.WebConnector;
 
 public class MainGUI extends JFrame{
 
@@ -235,7 +232,7 @@ public class MainGUI extends JFrame{
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!started){
+				if(!started || wtp == null){
 					started = true;
 					new Thread(getRunnable()).start();
 				}
@@ -281,51 +278,28 @@ public class MainGUI extends JFrame{
 
 			@Override
 			public void run(){
-				wtp = new WebTimedProcess();
-				wtp.gui = MainGUI.this;
-				wtp.setPaused(false);
-				new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp)).start();
+				try{
+					wtp = new WebTimedProcess();
+					wtp.gui = MainGUI.this;
+					wtp.setPaused(false);
+					new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp)).start();
 
-				/*
-				 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
-				 * wp.gui = MainGUI.this;
-				 * wp.process();
-				 */
-
+					/*
+					 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
+					 * wp.gui = MainGUI.this;
+					 * wp.process();
+					 */
+				}
+				catch(Exception e){
+					e.printStackTrace();
+					clear();
+				}
 			}
 
 		};
 	}
 
 
-	public static void test(){
-		System.out.println("Hello, world!");
-		//Records program start time in nanoseconds
-		long startTime = System.nanoTime();
-		connect();
-		//Records program end time in nanoseconds
-		long endTime = System.nanoTime();
-		//Calculates the difference of time in milliseconds
-		double difference = (endTime - startTime) / 1000000.0;
-		//Prints out the time passed in milliseconds
-		System.out.println("Time passed (ms): " + difference);
-		System.out.println("Goodbye, world!");
-	}
-
-	public static void connect(){
-		String urlString = "http://www.apple.com";
-		System.out.println("Connecting to page: " + urlString);
-		System.out.println();
-		try {
-			URL url = new URL(urlString);
-			String page = WebConnector.getWebpage(url);
-			System.out.println(page);
-			System.out.println();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 	public void siteFinish(){
 		if(toBeCleared){

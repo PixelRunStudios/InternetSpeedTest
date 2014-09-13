@@ -4,6 +4,8 @@ import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JOptionPane;
+
 import com.github.assisstion.InternetSpeedTest.MainGUI;
 import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
 import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
@@ -35,7 +37,13 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 
 	public WebTimedProcess(){
 		startTime = System.currentTimeMillis();
-		processor = new WebProcessor();
+		try{
+			processor = new WebProcessor();
+		}
+		catch(RuntimeException e){
+			JOptionPane.showOptionDialog(gui, "Invalid Websites File", "Error!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
+			throw e;
+		}
 		processor.silent = true;
 		try{
 			file.createNewFile();
