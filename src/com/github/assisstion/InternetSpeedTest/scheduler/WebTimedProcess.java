@@ -28,6 +28,7 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
 
+	private File dir = new File("data");
 	private File file = new File("data/output2.txt");
 
 	protected boolean paused = false;
@@ -46,6 +47,7 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		}
 		processor.silent = true;
 		try{
+			dir.mkdir();
 			file.createNewFile();
 		}
 		catch(IOException e){
