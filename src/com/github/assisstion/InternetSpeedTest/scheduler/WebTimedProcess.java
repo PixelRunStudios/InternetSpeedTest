@@ -28,6 +28,10 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 	private File file = new File("data/output2.txt");
 
+	protected boolean paused = false;
+	protected long pausedTime;
+	protected long pauseStart;
+
 	public WebTimedProcess(){
 		startTime = System.currentTimeMillis();
 		processor = new WebProcessor();
@@ -43,9 +47,9 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 
 			@Override
 			public void run(){
-				if(gui != null){
+				if(gui != null && paused == false){
 					gui.timePassed.setText(String.valueOf(TimeHelper.formatSeconds((
-							System.currentTimeMillis() - startTime) / 100 / 10.0)));
+							System.currentTimeMillis() - startTime - pausedTime) / 100 / 10.0)));
 				}
 			}
 
@@ -128,5 +132,25 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		gui.allKB.setText(String.valueOf(bytes / 1000));
 		gui.allTime.setText(String.valueOf(time / 1000.0));
 		gui.allSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
+	}
+
+	public synchronized boolean paused(){
+		return paused;
+	}
+
+	public synchronized void setPaused(boolean paused){
+		this.paused = paused;
+		if(!paused){
+			if(pauseStart != 0){
+				pausedTime += System.currentTimeMillis() - pauseStart;
+				pauseStart = 0;
+			}
+			notifyAll();
+		}
+		else{
+			if(pauseStart == 0){
+				pauseStart = System.currentTimeMillis();
+			}
+		}
 	}
 }

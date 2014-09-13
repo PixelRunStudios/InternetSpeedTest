@@ -86,6 +86,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		}
 		BufferedWriter writer = null;
 		try{
+
 			try{
 				new File("data").mkdir();
 				writer = new BufferedWriter(new FileWriter(new File("data/output.txt")));
@@ -95,6 +96,19 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				e1.printStackTrace();
 			}
 			for(Map.Entry<String, String> entry : data.entrySet()){
+				if(timer != null){
+					synchronized(timer){
+						while(timer.paused()){
+							try{
+								timer.wait(1000);
+							}
+							catch(InterruptedException e){
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+					}
+				}
 				boolean completelyFailed = false;
 				String newValue = null;
 				counter++;
@@ -122,6 +136,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 					}
 
 				}
+
 
 				//Waits for 1 minute before stopping
 				if(totalTime > 60000){

@@ -40,6 +40,7 @@ public class MainGUI extends JFrame{
 	public JLabel timePassed;
 	private JButton btnAbout;
 	private JButton btnSettings;
+	private WebTimedProcess wtp;
 
 	/**
 	 * Launch the application.
@@ -232,6 +233,7 @@ public class MainGUI extends JFrame{
 		btnStart.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				wtp.setPaused(false);
 			}
 		});
 		btnStart.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
@@ -242,6 +244,7 @@ public class MainGUI extends JFrame{
 		btnStop.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				wtp.setPaused(true);
 			}
 		});
 		btnStop.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
@@ -262,9 +265,11 @@ public class MainGUI extends JFrame{
 
 			@Override
 			public void run(){
-				WebTimedProcess wtp = new WebTimedProcess();
+				wtp = new WebTimedProcess();
 				wtp.gui = MainGUI.this;
+				wtp.setPaused(true);
 				new Thread(new RepetitionScheduler(-1, 1000, wtp)).start();
+
 				/*
 				 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
 				 * wp.gui = MainGUI.this;
