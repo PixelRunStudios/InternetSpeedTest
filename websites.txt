@@ -1,3 +1,42 @@
 Google	http://www.google.com
 Facebook	http://www.facebook.com
 YouTube	http://www.youtube.com
+Yahoo!	http://www.yahoo.com
+Wikipedia	http://www.wikipedia.org
+Twitter	http://www.twitter.com
+Windows Live	http://www.live.com
+Amazon.com	http://www.amazon.com
+LinkedIn	http://www.linkedin.com
+Blogspot	http://www.blogspot.com
+WordPress	http://www.wordpress.com
+Bing	http://www.bing.com
+eBay	http://www.ebay.com
+Pinterest	http://www.pinterest.com
+Instagram	http://www.instagram.com
+Ask.com	http://www.ask.com
+MSN	http://www.msn.com
+tumblr	http://www.tumblr.com
+Microsoft	http://www.microsoft.com
+PayPal	http://www.PayPal.com
+Apple Inc.	http://www.apple.com
+IMDB	http://www.imdb.com
+Adcash	http://www.adcash.com
+Imgur	http://www.imgur.com
+Craigslist	http://www.craigslist.org
+Reddit	http://www.reddit.com
+Stack Overflow	http://www.stackoverflow.com
+FC2, Inc.	http://www.fc2.com
+Go.com	http://www.go.com
+CNN	http://www.cnn.com
+Blogger	http://www.blogger.com
+Adobe	http://www.adobe.com
+Vube	http://www.vube.com
+GoDaddy	http://www.godaddy.com
+Huffington	http://www.huffingtonpost.com
+Wordpress	http://www.wordpress.org
+Netflix	http://www.netflix.com
+ESPN.com	http://www.espn.go.com
+Dailymotion	http://www.dailymotion.com
+RevenueHits	http://www.Clkmon.com
+About.com	http://www.about.com
+Blogspot	http://www.bp.blogspot.com
