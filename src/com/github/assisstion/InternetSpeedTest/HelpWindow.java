@@ -2,6 +2,7 @@ package com.github.assisstion.InternetSpeedTest;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -29,7 +30,7 @@ public class HelpWindow extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblInternetSpeedtester = new JLabel(new ImageIcon("cat1.jpg"));
+		JLabel lblInternetSpeedtester = new JLabel(new ImageIcon("resources" + File.separator +"cat1.jpg"));
 		lblInternetSpeedtester.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		contentPane.add(lblInternetSpeedtester);
 

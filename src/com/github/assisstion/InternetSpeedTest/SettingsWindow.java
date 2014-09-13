@@ -23,7 +23,10 @@ public class SettingsWindow extends JFrame{
 	private static final long serialVersionUID = 6226471022209066412L;
 	private JPanel contentPane;
 
-	public static final String FILE_LOCATION = "websites.txt";
+	public static final String FILE_LOCATION = "resources" +
+			File.separator + "websites.txt";
+	public static final String DEFAULT_FILE_LOCATION = "resources" +
+			File.separator + "defWebsites.txt";
 
 	/**
 	 * Create the frame.
@@ -72,7 +75,7 @@ public class SettingsWindow extends JFrame{
 		btnReset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				save(new File(FILE_LOCATION),load(new File("defWebsites.txt")));
+				save(new File(FILE_LOCATION),load(new File(DEFAULT_FILE_LOCATION)));
 				textPane.setText(load(new File(FILE_LOCATION)));
 			}
 		});
