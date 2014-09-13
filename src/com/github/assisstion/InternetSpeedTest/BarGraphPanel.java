@@ -118,8 +118,9 @@ public class BarGraphPanel extends JPanel{
 		 */
 
 		for(int j = (int)getMax() % markerAmount(); j <= getMax(); j+=markerAmount()){
-			g.drawLine(LEFT_X, (int) (TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))), LEFT_X + MARKER_LENGTH, (int)(TOP_Y + j*(getGraphHeight()/(getMax()/markerAmount()))));
-			g.drawString(String.valueOf(getMax()-j), LEFT_X - 32, (int) (TOP_Y + counter++*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()));
+			g.drawLine(LEFT_X - 10, (int) (TOP_Y + counter*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()),LEFT_X, (int) (TOP_Y + counter*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()));
+			g.drawString(String.valueOf(getMax()-j), LEFT_X - 32, (int) (TOP_Y + counter*(getGraphHeight()/((double)getMax()/markerAmount()))) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()));
+			counter++;
 		}
 		//g.drawString(String.valueOf(getMax()), LEFT_X + 5, (int) (TOP_Y + getGraphHeight()/((double)getMax()/markerAmount())) + (int)(getMax() % markerAmount()/(double)getMax()*getGraphHeight()) - (int)(markerAmount()/(double)getMax()*getGraphHeight()));
 	}
