@@ -37,6 +37,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	private String currentName = "N/A";
 	private boolean done = false;
 	public WebTimedProcess timer;
+	private boolean siteRunning = false;
 
 	public static void main(String[] args){
 		WebProcessor wp = new WebProcessor(getWebsites());
@@ -98,7 +99,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			for(Map.Entry<String, String> entry : data.entrySet()){
 				if(timer != null){
 					synchronized(timer){
-						while(timer.paused()){
+						while(timer.paused() && timer.isAlive()){
 							try{
 								timer.wait(1000);
 							}
@@ -108,6 +109,12 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 							}
 						}
 					}
+					if(!timer.isAlive()){
+						return;
+					}
+				}
+				if(gui != null){
+					gui.siteFinish();
 				}
 				boolean completelyFailed = false;
 				String newValue = null;
@@ -198,6 +205,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	}
 
 	public boolean processSite(String name, String website){
+		siteRunning = true;
 		attemptCount++;
 		try{
 			if(!https){
@@ -213,7 +221,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			URL url = new URL(website);
 			HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>> set = new HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>>();
 			set.add(this);
-			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set, attemptCount);
+			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set, attemptCount, timer);
 			synchronized(this){
 				totalBytes += total.getValueOne();
 				totalTime += total.getValueTwo();
@@ -248,6 +256,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			}
 			return false;
 		}
+		finally{
+			siteRunning = false;
+		}
 	}
 
 	@Override
@@ -279,5 +290,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 	public int numSites(){
 		return data.size();
+	}
+
+	public boolean siteRunning(){
+		return siteRunning;
 	}
 }

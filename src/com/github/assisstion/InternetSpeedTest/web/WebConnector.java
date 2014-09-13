@@ -11,6 +11,7 @@ import javax.swing.SwingWorker;
 
 import com.github.assisstion.InternetSpeedTest.MainGUI;
 import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
+import com.github.assisstion.InternetSpeedTest.scheduler.LifeLine;
 import com.github.assisstion.Shared.Pair;
 
 public class WebConnector {
@@ -47,8 +48,8 @@ public class WebConnector {
 	 * @throws IOException when the webpage cannot be connected to
 	 */
 	public static Pair<Long, Long> webpageByteCount(URL url, boolean silent, MainGUI gui,
-			Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount) throws IOException{
-		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui, senders, attemptCount);
+			Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount, LifeLine lifeLine) throws IOException{
+		WebpageByteCount wbc = new WebpageByteCount(url, silent, gui, senders, attemptCount, lifeLine);
 		wbc.execute();
 		try{
 			return wbc.get();
@@ -68,14 +69,16 @@ public class WebConnector {
 
 		private long count;
 		private long startTime;
+		private LifeLine line;
 
 		public WebpageByteCount(URL url, boolean silent, MainGUI gui,
-				Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount){
+				Collection<InfoSender<Pair<Pair<Long, Long>, Integer>>> senders, int attemptCount, LifeLine lifeLine){
 			this.url = url;
 			this.silent = silent;
 			this.gui = gui;
 			this.senders = senders;
 			this.attemptCount = attemptCount;
+			line = lifeLine;
 		}
 
 		@Override
@@ -116,7 +119,7 @@ public class WebConnector {
 
 		@Override
 		protected void process(List<Pair<Long, Long>> pairs){
-			if(gui == null){
+			if(gui == null || line != null && !line.isAlive()){
 				return;
 			}
 			Pair<Long, Long> pair = pairs.get(pairs.size() - 1);

@@ -41,6 +41,7 @@ public class MainGUI extends JFrame{
 	private JButton btnAbout;
 	private JButton btnSettings;
 	private WebTimedProcess wtp;
+	private boolean toBeCleared;
 
 	/**
 	 * Launch the application.
@@ -255,20 +256,30 @@ public class MainGUI extends JFrame{
 		btnClear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(wtp.siteRunning()){
+					toBeCleared = true;
+				}
+				else{
+					clear();
+				}
 			}
 		});
 		btnClear.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
 		btnClear.setBounds(229, 10, 61, 29);
 		contentPane.add(btnClear);
 
-		new Thread(new Runnable(){
+		new Thread(getRunnable()).start();
+	}
+
+	public Runnable getRunnable(){
+		return new Runnable(){
 
 			@Override
 			public void run(){
 				wtp = new WebTimedProcess();
 				wtp.gui = MainGUI.this;
 				wtp.setPaused(true);
-				new Thread(new RepetitionScheduler(-1, 1000, wtp)).start();
+				new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp)).start();
 
 				/*
 				 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
@@ -278,7 +289,7 @@ public class MainGUI extends JFrame{
 
 			}
 
-		}).start();
+		};
 	}
 
 
@@ -309,5 +320,31 @@ public class MainGUI extends JFrame{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public void siteFinish(){
+		if(toBeCleared){
+			toBeCleared = false;
+			clear();
+		}
+	}
+
+	protected void clear(){
+		wtp.clear();
+		graphWindow.setVisible(false);
+		graphWindow = new GraphWindow();
+		website.setText("N/A");
+		speed.setText("N/A");
+		cumulativeSpeed.setText("N/A");
+		siteTime.setText("N/A");
+		siteKB.setText("N/A");
+		time.setText("N/A");
+		kb.setText("N/A");
+		run.setText("N/A");
+		allSpeed.setText("N/A");
+		allTime.setText("N/A");
+		allKB.setText("N/A");
+		timePassed.setText("N/A");
+		new Thread(getRunnable()).start();
 	}
 }

@@ -15,8 +15,8 @@ public class GraphWindow extends JFrame{
 	 */
 	private static final long serialVersionUID = 8002278492569073893L;
 	private JPanel contentPane;
-	public LineGraphPanel timePanel = new LineGraphPanel();
-	public BarGraphPanel sitePanel = new BarGraphPanel();
+	public LineGraphPanel timePanel;
+	public BarGraphPanel sitePanel;
 
 
 	/**
@@ -27,6 +27,12 @@ public class GraphWindow extends JFrame{
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 600);
+		reset();
+	}
+
+	public void reset(){
+		timePanel = new LineGraphPanel();
+		sitePanel = new BarGraphPanel();
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

@@ -12,7 +12,7 @@ import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;
 
-public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
+public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, LifeLine{
 
 	protected WebProcessor processor;
 
@@ -31,6 +31,7 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 	protected boolean paused = false;
 	protected long pausedTime;
 	protected long pauseStart;
+	protected boolean alive = true;
 
 	public WebTimedProcess(){
 		startTime = System.currentTimeMillis();
@@ -53,7 +54,7 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 				}
 			}
 
-		})).start();;
+		}, this)).start();
 	}
 
 	@Override
@@ -86,6 +87,9 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 		processor.timer = this;
 		processor.gui = gui;
 		processor.process();
+		if(!isAlive()){
+			return;
+		}
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
 		double oldSpeed = (double) bytes / (double) time;
@@ -152,5 +156,18 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>{
 				pauseStart = System.currentTimeMillis();
 			}
 		}
+	}
+
+	public void clear(){
+		alive = false;
+	}
+
+	@Override
+	public boolean isAlive(){
+		return alive;
+	}
+
+	public boolean siteRunning(){
+		return processor.siteRunning();
 	}
 }
