@@ -17,6 +17,7 @@ public class GraphWindow extends JFrame{
 	private JPanel contentPane;
 	public LineGraphPanel timePanel;
 	public BarGraphPanel sitePanel;
+	public LineGraphPanel runPanel;
 
 
 	/**
@@ -31,8 +32,9 @@ public class GraphWindow extends JFrame{
 	}
 
 	public void reset(){
-		timePanel = new LineGraphPanel();
+		timePanel = new LineGraphPanel(true);
 		sitePanel = new BarGraphPanel();
+		runPanel = new LineGraphPanel(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -40,6 +42,7 @@ public class GraphWindow extends JFrame{
 
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addTab("By Time", timePanel);
+		tabbedPane.addTab("By Run", runPanel);
 		tabbedPane.addTab("By Website", sitePanel);
 
 		contentPane.add(tabbedPane, BorderLayout.CENTER);

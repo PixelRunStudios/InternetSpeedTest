@@ -50,7 +50,7 @@ public class LineGraphPanel extends JPanel{
 	/**
 	 * Create the panel.
 	 */
-	public LineGraphPanel(){
+	public LineGraphPanel(boolean hasHideRunLines){
 		setLayout(null);
 
 		JButton btnSetValue = new JButton("Set Point Interval");
@@ -111,8 +111,9 @@ public class LineGraphPanel extends JPanel{
 
 		chckbxHideRunLines = new JCheckBox("Hide Run Lines");
 		chckbxHideRunLines.setBounds(260, 1, 128, 23);
-		add(chckbxHideRunLines);
-
+		if(hasHideRunLines){
+			add(chckbxHideRunLines);
+		}
 	}
 
 	@Override

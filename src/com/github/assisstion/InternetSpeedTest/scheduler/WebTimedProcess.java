@@ -100,10 +100,14 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		}
 		if(gui != null){
 			gui.graphWindow.timePanel.runEnd();
+
 		}
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
 		double oldSpeed = (double) bytes / (double) time;
+		if(gui != null){
+			gui.graphWindow.runPanel.pushLine(System.currentTimeMillis(), oldSpeed);
+		}
 		System.out.println("Total Bytes: " + bytes);
 		System.out.println("Total Time (ms): " + time);
 		System.out.println("Average Speed (KB/s): " + oldSpeed);
