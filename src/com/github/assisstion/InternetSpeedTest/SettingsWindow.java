@@ -23,6 +23,8 @@ public class SettingsWindow extends JFrame{
 	private static final long serialVersionUID = 6226471022209066412L;
 	private JPanel contentPane;
 
+	public static final String FILE_LOCATION = "websites.txt";
+
 	/**
 	 * Create the frame.
 	 */
@@ -42,13 +44,13 @@ public class SettingsWindow extends JFrame{
 		JTextPane textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
 
-		textPane.setText(load(new File("websites.txt")));
+		textPane.setText(load(new File(FILE_LOCATION)));
 
 		JButton btnOpen = new JButton("Load");
 		btnOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				textPane.setText(load(new File("websites.txt")));
+				textPane.setText(load(new File(FILE_LOCATION)));
 
 			}
 		});
@@ -61,7 +63,7 @@ public class SettingsWindow extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String out = textPane.getText();
-				save(new File("websites.txt"),out);
+				save(new File(FILE_LOCATION),out);
 			}
 		});
 		contentPane.add(btnSave);
@@ -70,8 +72,8 @@ public class SettingsWindow extends JFrame{
 		btnReset.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				save(new File("websites.txt"),load(new File("defWebsites.txt")));
-				textPane.setText(load(new File("websites.txt")));
+				save(new File(FILE_LOCATION),load(new File("defWebsites.txt")));
+				textPane.setText(load(new File(FILE_LOCATION)));
 			}
 		});
 		btnReset.setBounds(266, 18, 71, 29);
@@ -97,7 +99,7 @@ public class SettingsWindow extends JFrame{
 	}
 
 	public void save(File file, String out){
-		file = new File("websites.txt");
+		file = new File(FILE_LOCATION);
 		try{
 			FileHelper.write(file,out);
 		}

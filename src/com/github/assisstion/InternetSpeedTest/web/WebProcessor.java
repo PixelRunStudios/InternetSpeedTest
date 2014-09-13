@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.github.assisstion.InternetSpeedTest.MainGUI;
+import com.github.assisstion.InternetSpeedTest.SettingsWindow;
 import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
 import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
@@ -48,7 +49,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		Map<String, String> out = new LinkedHashMap<String, String>();
 		try{
 			//Insert your own file here
-			String in = FileHelper.read(new File("websites.txt"));
+			String in = FileHelper.read(new File(SettingsWindow.FILE_LOCATION));
 			String[] inArray = in.split("\n");
 			for(String part : inArray){
 				String[] partArray = part.split("\t");
