@@ -8,7 +8,7 @@ Windows Live	http://www.live.com
 Amazon.com	http://www.amazon.com
 LinkedIn	http://www.linkedin.com
 Blogspot	http://www.blogspot.com
-WordPress.com	http://www.wordpress.com
+WordPress	http://www.wordpress.com
 Bing	http://www.bing.com
 eBay	http://www.ebay.com
 Pinterest	http://www.pinterest.com
@@ -29,11 +29,11 @@ FC2, Inc.	http://www.fc2.com
 Go.com	http://www.go.com
 CNN	http://www.cnn.com
 Blogger	http://www.blogger.com
-Adobe Systems	http://www.adobe.com
+Adobe	http://www.adobe.com
 Vube	http://www.vube.com
 GoDaddy	http://www.godaddy.com
-The Huffington Post	http://www.huffingtonpost.com
-Wordpress.org	http://www.wordpress.org
+Huffington	http://www.huffingtonpost.com
+Wordpress	http://www.wordpress.org
 Netflix	http://www.netflix.com
 ESPN.com	http://www.espn.go.com
 Dailymotion	http://www.dailymotion.com
