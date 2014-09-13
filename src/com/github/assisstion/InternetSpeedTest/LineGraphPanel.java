@@ -30,7 +30,7 @@ public class LineGraphPanel extends JPanel{
 	private TreeMap<Long, Double> data = new TreeMap<Long, Double>();
 	private int valuesPerPoint = 1;
 	private int pixelInterval = 2;
-	private int max = 0;
+	//private int max = 0;
 	private JTextField textField;
 	private JTextField textField_1;
 	private JButton btnMoveDisplay;
@@ -38,6 +38,8 @@ public class LineGraphPanel extends JPanel{
 	private boolean automove = true;
 	private int movePosition = 0;
 	private static final int LABELS = 6;
+	private static final int CAP = 200;
+	private static final int MARKER_LENGTH = 10;
 
 	/**
 	 * Create the panel.
@@ -131,6 +133,7 @@ public class LineGraphPanel extends JPanel{
 			}
 			entry = data.lowerEntry(entry.getKey());
 		}
+		int max = 0;
 		for(int i = 0; i < size; i++){
 			if(entry == null){
 				break;
@@ -139,10 +142,10 @@ public class LineGraphPanel extends JPanel{
 			speedStackCount++;
 			if(speedStackCount >= valuesPerPoint){
 				double speed = (double) speedStack / (double) speedStackCount;
-				points.add(speed);
 				if(speed > max){
 					max = (int) speed;
 				}
+				points.add(speed);
 				speedStack = 0;
 				speedStackCount = 0;
 			}
@@ -155,7 +158,7 @@ public class LineGraphPanel extends JPanel{
 			double value = points.get(points.size() - i - 1);
 			int y = BOTTOM_Y;
 			if(hasLast){
-				y = BOTTOM_Y - (int) (value * getGraphHeight() / max);
+				y = BOTTOM_Y - (int) (value * getGraphHeight() / (max + CAP));
 				g.drawLine(lastX, lastY, lastX + 2, y);
 			}
 			lastX = lastX + 2;
@@ -186,8 +189,14 @@ public class LineGraphPanel extends JPanel{
 				entryX = data.higherEntry(entryX.getKey());
 			}
 		}
-	}
+		for(int j = 0; j <= max + CAP; j += markerAmount(max + CAP)){
+			int y = (int) (j / (double) (max + CAP) * getGraphHeight());
+			g.drawLine(LEFT_X, BOTTOM_Y - y, LEFT_X - MARKER_LENGTH, BOTTOM_Y - y);
+			g.drawString(String.valueOf(j), LEFT_X - 32, BOTTOM_Y - y);
+		}
+		//g.drawString(String.valueOf(max + CAP), LEFT_X - 32, TOP_Y);
 
+	}
 
 	public void pushLine(long timeStamp, double speed){
 		data.put(timeStamp, speed);
@@ -211,5 +220,9 @@ public class LineGraphPanel extends JPanel{
 		public int compareTo(Point o){
 			return Integer.compare(x, o.x);
 		}
+	}
+
+	public int markerAmount(int max){
+		return max / 50 * 5;
 	}
 }
