@@ -176,9 +176,8 @@ public class LineGraphPanel extends JPanel{
 		int lastY = BOTTOM_Y;
 		for(int i = 0; i < points.size(); i++){
 			double value = points.get(points.size() - i - 1).getValueOne();
-			int y = BOTTOM_Y;
+			int y = BOTTOM_Y - (int) (value * getGraphHeight() / (max + CAP));
 			if(hasLast){
-				y = BOTTOM_Y - (int) (value * getGraphHeight() / (max + CAP));
 				g.setColor(Color.blue);
 				g.drawLine(lastX, lastY, lastX + ADDITION, y);
 			}
