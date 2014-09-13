@@ -90,6 +90,9 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		if(!isAlive()){
 			return;
 		}
+		if(gui != null){
+			gui.graphWindow.timePanel.runEnd();
+		}
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
 		double oldSpeed = (double) bytes / (double) time;

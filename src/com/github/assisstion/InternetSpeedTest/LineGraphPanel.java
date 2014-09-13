@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.github.assisstion.InternetSpeedTest.helper.TimeHelper;
+import com.github.assisstion.Shared.Pair;
 
 public class LineGraphPanel extends JPanel{
 
@@ -40,6 +41,9 @@ public class LineGraphPanel extends JPanel{
 	private static final int LABELS = 6;
 	private static final int CAP = 200;
 	private static final int MARKER_LENGTH = 10;
+	private static final int ADDITION = 2;
+
+	private ArrayList<Long> ends = new ArrayList<Long>();
 
 	/**
 	 * Create the panel.
@@ -60,18 +64,18 @@ public class LineGraphPanel extends JPanel{
 				}
 			}
 		});
-		btnSetValue.setBounds(50, 0, 150, 29);
+		btnSetValue.setBounds(98, 0, 150, 29);
 		add(btnSetValue);
 
 		textField = new JTextField();
 		textField.setText("1");
-		textField.setBounds(0, 0, 40, 28);
+		textField.setBounds(48, 0, 40, 28);
 		add(textField);
 		textField.setColumns(2);
 
 		textField_1 = new JTextField();
 		textField_1.setText("0");
-		textField_1.setBounds(215, 0, 80, 28);
+		textField_1.setBounds(543, 0, 80, 28);
 		add(textField_1);
 		textField_1.setColumns(10);
 
@@ -89,7 +93,7 @@ public class LineGraphPanel extends JPanel{
 				}
 			}
 		});
-		btnMoveDisplay.setBounds(300, 0, 180, 29);
+		btnMoveDisplay.setBounds(628, 0, 170, 29);
 		add(btnMoveDisplay);
 
 		btnUseAutomove = new JButton("Use Automove");
@@ -100,7 +104,7 @@ public class LineGraphPanel extends JPanel{
 				repaint();
 			}
 		});
-		btnUseAutomove.setBounds(500, 0, 150, 29);
+		btnUseAutomove.setBounds(796, 0, 130, 29);
 		add(btnUseAutomove);
 
 	}
@@ -108,10 +112,14 @@ public class LineGraphPanel extends JPanel{
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
+		if(data.size()>0){
+			g.drawString("Last Update: ",270,18);
+			g.drawString(TimeHelper.formatSystemTimeCompact(data.lastEntry().getKey()), 360, 18);
+		}
 		g.setColor(Color.BLACK);
 		g.drawRect(LEFT_X, TOP_Y, getGraphWidth(), getGraphHeight());
 		int size = getGraphWidth() / pixelInterval * valuesPerPoint;
-		ArrayList<Double> points = new ArrayList<Double>(size / valuesPerPoint);
+		ArrayList<Pair<Double, Boolean>> points = new ArrayList<Pair<Double, Boolean>>(size / valuesPerPoint);
 		Map.Entry<Long, Double> entry = data.lastEntry();
 		int speedStack = 0;
 		int speedStackCount = 0;
@@ -133,6 +141,7 @@ public class LineGraphPanel extends JPanel{
 			}
 			entry = data.lowerEntry(entry.getKey());
 		}
+		int index = 0;
 		int max = 0;
 		for(int i = 0; i < size; i++){
 			if(entry == null){
@@ -141,11 +150,16 @@ public class LineGraphPanel extends JPanel{
 			speedStack += entry.getValue();
 			speedStackCount++;
 			if(speedStackCount >= valuesPerPoint){
+				boolean end = false;
+				if(ends.size() > index && ends.get(ends.size() - index - 1) > entry.getKey()){
+					index++;
+					end = true;
+				}
 				double speed = (double) speedStack / (double) speedStackCount;
 				if(speed > max){
 					max = (int) speed;
 				}
-				points.add(speed);
+				points.add(new Pair<Double, Boolean>(speed, end));
 				speedStack = 0;
 				speedStackCount = 0;
 			}
@@ -155,16 +169,30 @@ public class LineGraphPanel extends JPanel{
 		int lastX = LEFT_X;
 		int lastY = BOTTOM_Y;
 		for(int i = 0; i < points.size(); i++){
-			double value = points.get(points.size() - i - 1);
+			double value = points.get(points.size() - i - 1).getValueOne();
 			int y = BOTTOM_Y;
 			if(hasLast){
 				y = BOTTOM_Y - (int) (value * getGraphHeight() / (max + CAP));
-				g.drawLine(lastX, lastY, lastX + 2, y);
+				g.setColor(Color.blue);
+				g.drawLine(lastX, lastY, lastX + ADDITION, y);
 			}
-			lastX = lastX + 2;
+			if(points.get(points.size() - i - 1).getValueTwo()){
+				g.setColor(Color.DARK_GRAY);
+				g.drawLine(lastX+ADDITION, TOP_Y, lastX+ADDITION, BOTTOM_Y);
+				g.setColor(Color.black);
+			}
+			lastX = lastX + ADDITION;
 			lastY = y;
 			hasLast = true;
 		}
+
+		g.setColor(Color.red);
+		g.drawLine(lastX+2, TOP_Y, lastX+2, BOTTOM_Y);
+		g.setColor(Color.black);
+
+
+
+
 		int off = size / LABELS;
 		Map.Entry<Long, Double> entryX;
 		if(entry == null){
@@ -173,6 +201,8 @@ public class LineGraphPanel extends JPanel{
 		else{
 			entryX = entry;
 		}
+		g.setColor(Color.black);
+
 		out: for(int i = 0; i < LABELS; i++){
 			if(entryX == null){
 				break out;
@@ -200,7 +230,12 @@ public class LineGraphPanel extends JPanel{
 
 	public void pushLine(long timeStamp, double speed){
 		data.put(timeStamp, speed);
+
 		repaint();
+	}
+
+	public void runEnd(){
+		ends.add(System.currentTimeMillis());
 	}
 
 	public static int getGraphWidth(){
