@@ -1,0 +1,5 @@
+url-location=http://markusfeng.com/downloads/internetspeedtest
+local-location=~/Library/Application Support/assisstion/internetspeedtest
+main=internetSpeedTest
+main-class=com.github.assisstion.InternetSpeedTest.MainGUI
+app-name=Internet Speedtest
