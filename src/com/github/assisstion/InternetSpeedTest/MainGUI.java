@@ -156,7 +156,8 @@ public class MainGUI extends JFrame{
 		contentPane.add(run);
 
 		JLabel lblCumulativeRunSpeed = new JLabel("Cumulative Run Speed:");
-		lblCumulativeRunSpeed.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
+		lblCumulativeRunSpeed
+				.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblCumulativeRunSpeed.setBounds(16, 117, 151, 16);
 		contentPane.add(lblCumulativeRunSpeed);
 
@@ -187,9 +188,9 @@ public class MainGUI extends JFrame{
 
 		btnGetGraphs = new JButton("Graphs");
 		btnGetGraphs.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-		btnGetGraphs.addActionListener(new ActionListener() {
+		btnGetGraphs.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				graphWindow.setVisible(true);
 			}
 		});
@@ -208,9 +209,9 @@ public class MainGUI extends JFrame{
 
 		btnAbout = new JButton("?");
 		btnAbout.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-		btnAbout.addActionListener(new ActionListener() {
+		btnAbout.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				helpWindow.setVisible(true);
 			}
 		});
@@ -218,9 +219,9 @@ public class MainGUI extends JFrame{
 		contentPane.add(btnAbout);
 
 		btnSettings = new JButton("Settings");
-		btnSettings.addActionListener(new ActionListener() {
+		btnSettings.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				settingsWindow.setVisible(true);
 			}
 		});
@@ -229,9 +230,9 @@ public class MainGUI extends JFrame{
 		contentPane.add(btnSettings);
 
 		JButton btnStart = new JButton("Start");
-		btnStart.addActionListener(new ActionListener() {
+		btnStart.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				if(!started || wtp == null){
 					started = true;
 					new Thread(getRunnable()).start();
@@ -246,9 +247,9 @@ public class MainGUI extends JFrame{
 		contentPane.add(btnStart);
 
 		JButton btnStop = new JButton("Stop");
-		btnStop.addActionListener(new ActionListener() {
+		btnStop.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				wtp.setPaused(true);
 			}
 		});
@@ -257,9 +258,9 @@ public class MainGUI extends JFrame{
 		contentPane.add(btnStop);
 
 		JButton btnClear = new JButton("Clear");
-		btnClear.addActionListener(new ActionListener() {
+		btnClear.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				if(wtp.siteRunning()){
 					toBeCleared = true;
 				}
@@ -282,12 +283,13 @@ public class MainGUI extends JFrame{
 					wtp = new WebTimedProcess();
 					wtp.gui = MainGUI.this;
 					wtp.setPaused(false);
-					new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp)).start();
+					new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp))
+							.start();
 
 					/*
-					 * WebProcessor wp = new WebProcessor(WebProcessor.getWebsites());
-					 * wp.gui = MainGUI.this;
-					 * wp.process();
+					 * WebProcessor wp = new
+					 * WebProcessor(WebProcessor.getWebsites()); wp.gui =
+					 * MainGUI.this; wp.process();
 					 */
 				}
 				catch(Exception e){
@@ -298,8 +300,6 @@ public class MainGUI extends JFrame{
 
 		};
 	}
-
-
 
 	public void siteFinish(){
 		if(toBeCleared){

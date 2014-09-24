@@ -27,7 +27,8 @@ public class PopularWebsiteGetter{
 		}
 	}
 
-	public static String[] getWebsites() throws MalformedURLException, IOException{
+	public static String[] getWebsites() throws MalformedURLException,
+			IOException{
 		String name = "";
 		boolean thing = false;
 		String url = "";
@@ -37,10 +38,10 @@ public class PopularWebsiteGetter{
 		String html = WebConnector.getWebpage(new URL(
 				"http://en.wikipedia.org/wiki/List_of_most_popular_websites"));
 		String[] split = html.split("</tr>\n<tr>");
-		//Accidentally skipped 100th place
+		// Accidentally skipped 100th place
 		for(int i = 0; i < split.length; i++){
 			thing = false;
-			//System.out.println(i + "\n");
+			// System.out.println(i + "\n");
 			String website = split[i];
 			if(i == 0){
 				continue;
@@ -55,26 +56,30 @@ public class PopularWebsiteGetter{
 			}
 			if(!thing){
 				for(int j = 0; j < lines.length; j++){
-					//System.out.println(lines[j]);
+					// System.out.println(lines[j]);
 					switch(j){
 						case 0:
 							continue;
 						case 1:
 							if(lines[1].contains("\">")){
-								String[] firstLine = lines[1].split("\">")[1].split("</a>");
+								String[] firstLine = lines[1].split("\">")[1]
+										.split("</a>");
 								name = firstLine[0];
 								nameA.add(name);
-							}else{
-								String[] firstLine = lines[1].split("<td>")[1].split("</td>");
+							}
+							else{
+								String[] firstLine = lines[1].split("<td>")[1]
+										.split("</td>");
 								name = firstLine[0];
 								nameA.add(name);
 							}
 							break;
 						case 2:
-							String[] secondLine = lines[2].split("<td>")[1].split("</td>");
+							String[] secondLine = lines[2].split("<td>")[1]
+									.split("</td>");
 							url = "http://www." + secondLine[0];
 							urlA.add(url);
-							//System.out.println(url);
+							// System.out.println(url);
 							break;
 
 					}
@@ -82,7 +87,7 @@ public class PopularWebsiteGetter{
 			}
 		}
 
-		for(int i = 0; i < nameA.size();i++){
+		for(int i = 0; i < nameA.size(); i++){
 			System.out.println(i);
 			System.out.println(nameA.get(i));
 			System.out.println(urlA.get(i));
@@ -92,11 +97,9 @@ public class PopularWebsiteGetter{
 
 		String everything = "";
 
-		for(int i = 0; i<nameA.size();i++){
-			everything += nameA.get(i) + "	" + urlA.get(i)+ "\n";
+		for(int i = 0; i < nameA.size(); i++){
+			everything += nameA.get(i) + "	" + urlA.get(i) + "\n";
 		}
-
-
 
 		File file = new File("");
 

@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 public class HelpWindow extends JFrame{
@@ -23,15 +24,17 @@ public class HelpWindow extends JFrame{
 	 */
 	public HelpWindow(){
 		setTitle("Help");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 325);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblInternetSpeedtester = new JLabel(new ImageIcon("resources" + File.separator +"cat1.jpg"));
-		lblInternetSpeedtester.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+		JLabel lblInternetSpeedtester = new JLabel(new ImageIcon("resources" +
+				File.separator + "cat1.jpg"));
+		lblInternetSpeedtester.setFont(new Font("Helvetica Neue", Font.PLAIN,
+				13));
 		contentPane.add(lblInternetSpeedtester);
 
 	}

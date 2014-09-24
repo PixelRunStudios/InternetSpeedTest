@@ -4,7 +4,6 @@ import java.text.DecimalFormat;
 
 public class MathHelper{
 
-
 	public static double roundThreeDecimals(double d){
 		if(Double.isInfinite(d) || Double.isNaN(d)){
 			return d;

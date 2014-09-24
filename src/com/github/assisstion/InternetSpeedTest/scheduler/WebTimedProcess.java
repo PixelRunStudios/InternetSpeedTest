@@ -14,7 +14,8 @@ import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;
 
-public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, LifeLine{
+public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>,
+		LifeLine{
 
 	protected WebProcessor processor;
 
@@ -42,7 +43,9 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 			processor = new WebProcessor();
 		}
 		catch(RuntimeException e){
-			JOptionPane.showOptionDialog(gui, "Invalid Websites File", "Error!", JOptionPane.OK_CANCEL_OPTION, JOptionPane.ERROR_MESSAGE, null, null, null);
+			JOptionPane.showOptionDialog(gui, "Invalid Websites File",
+					"Error!", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.ERROR_MESSAGE, null, null, null);
 			throw e;
 		}
 		processor.silent = true;
@@ -59,8 +62,9 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 			@Override
 			public void run(){
 				if(gui != null && paused == false){
-					gui.timePassed.setText(String.valueOf(TimeHelper.formatSeconds((
-							System.currentTimeMillis() - startTime - pausedTime) / 100 / 10.0)));
+					gui.timePassed.setText(String.valueOf(TimeHelper
+							.formatSeconds((System.currentTimeMillis() -
+									startTime - pausedTime) / 100 / 10.0)));
 				}
 			}
 
@@ -93,7 +97,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		}
 
 		long startTime = System.currentTimeMillis();
-		System.out.println("Starting timed process at: " + TimeHelper.formatSystemTime(startTime));
+		System.out.println("Starting timed process at: " +
+				TimeHelper.formatSystemTime(startTime));
 		processor.timer = this;
 		processor.gui = gui;
 		processor.process();
@@ -108,7 +113,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		long bytes = processor.getTotalBytes();
 		double oldSpeed = (double) bytes / (double) time;
 		if(gui != null){
-			gui.graphWindow.runPanel.pushLine(System.currentTimeMillis(), oldSpeed);
+			gui.graphWindow.runPanel.pushLine(System.currentTimeMillis(),
+					oldSpeed);
 		}
 		System.out.println("Total Bytes: " + bytes);
 		System.out.println("Total Time (ms): " + time);
@@ -124,7 +130,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		System.out.println("Cumulative Average Speed (KB/s): " + speed);
 		System.out.println();
 		if(!lastRunZero){
-			in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" + time + "\t" + oldSpeed + "\n";
+			in += TimeHelper.formatSystemTime(startTime) + "\t" + bytes + "\t" +
+					time + "\t" + oldSpeed + "\n";
 
 			try{
 				FileHelper.write(file, in);
@@ -152,7 +159,8 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>, 
 		long time = totalTime + info.getValueTwo();
 		gui.allKB.setText(String.valueOf(bytes / 1000));
 		gui.allTime.setText(String.valueOf(time / 1000.0));
-		gui.allSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals((double) bytes / (double) time)));
+		gui.allSpeed.setText(String.valueOf(MathHelper
+				.roundThreeDecimals((double) bytes / (double) time)));
 	}
 
 	public synchronized boolean paused(){

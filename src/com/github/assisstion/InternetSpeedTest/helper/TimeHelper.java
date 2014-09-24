@@ -8,24 +8,26 @@ import java.time.format.DateTimeFormatter;
 
 public class TimeHelper{
 	public static String formatSeconds(double seconds){
-		return formatDuration(Duration.ofSeconds((long)seconds,
-				Math.round((seconds - (int) seconds) * 10) * 100000000L), 1);
+		return formatDuration(Duration.ofSeconds((long) seconds,
+				Math.round((seconds - (int) seconds) * 10) * 100000000L));// ,
+																			// 1);
 	}
 
-	public static String formatDuration(Duration dur, int digits){
+	public static String formatDuration(Duration dur){// , int digits){
 		long seconds = dur.getSeconds();
-		//int nanos = dur.getNano();
+		// int nanos = dur.getNano();
 		long hours = seconds / 3600;
 		int minutes = (int) (seconds % 3600 / 60);
 		int secs = (int) (seconds % 60);
 		String s = "";
-		if (hours != 0) {
+		if(hours != 0){
 			s += hours + ":";
 		}
 		s += fillZeros(minutes, 2) + ":" + fillZeros(secs, 2);
-		//if(nanos > 0){
-		//	s += "." + fillZeros((int) Math.round(nanos * 100000000L * Math.pow(10, digits)), digits);
-		//}
+		// if(nanos > 0){
+		// s += "." + fillZeros((int) Math.round(nanos * 100000000L *
+		// Math.pow(10, digits)), digits);
+		// }
 		return s;
 	}
 
@@ -47,7 +49,8 @@ public class TimeHelper{
 
 	public static String formatSystemTime(long millis){
 		Instant time = Instant.ofEpochMilli(millis);
-		LocalDateTime localDateTime = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
+		LocalDateTime localDateTime = LocalDateTime.ofInstant(time,
+				ZoneId.systemDefault());
 		return localDateTime.format(DateTimeFormatter.ISO_DATE_TIME);
 	}
 

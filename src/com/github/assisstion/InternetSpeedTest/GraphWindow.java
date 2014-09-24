@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 public class GraphWindow extends JFrame{
@@ -19,14 +21,13 @@ public class GraphWindow extends JFrame{
 	public BarGraphPanel sitePanel;
 	public LineGraphPanel runPanel;
 
-
 	/**
 	 * Create the frame.
 	 */
 	public GraphWindow(){
 		setTitle("Graph Window");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 600);
 		reset();
 	}
@@ -40,7 +41,7 @@ public class GraphWindow extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		JTabbedPane tabbedPane = new JTabbedPane(SwingConstants.TOP);
 		tabbedPane.addTab("By Time", timePanel);
 		tabbedPane.addTab("By Run", runPanel);
 		tabbedPane.addTab("By Website", sitePanel);

@@ -18,12 +18,12 @@ import com.github.assisstion.InternetSpeedTest.helper.MathHelper;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.Shared.Pair;
 
-public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>{
-
+public class WebProcessor implements
+		InfoSender<Pair<Pair<Long, Long>, Integer>>{
 
 	protected Map<String, String> data;
 
-	//Time in ms
+	// Time in ms
 	protected int attemptCount = 0;
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
@@ -48,7 +48,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 	public static Map<String, String> getWebsites(){
 		Map<String, String> out = new LinkedHashMap<String, String>();
 		try{
-			//Insert your own file here
+			// Insert your own file here
 			String in = FileHelper.read(new File(SettingsWindow.FILE_LOCATION));
 			String[] inArray = in.split("\n");
 			for(String part : inArray){
@@ -71,7 +71,6 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		this(getWebsites());
 	}
 
-
 	public void process(){
 		done = false;
 		attemptCount = 0;
@@ -91,7 +90,8 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 			try{
 				new File("data").mkdir();
-				writer = new BufferedWriter(new FileWriter(new File("data/output.txt")));
+				writer = new BufferedWriter(new FileWriter(new File(
+						"data/output.txt")));
 			}
 			catch(IOException e1){
 				// TODO Auto-generated catch block
@@ -133,7 +133,10 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				}
 				if(!completelyFailed){
 					String string = "";
-					string += entry.getKey() + "\t"+ (newValue == null ? entry.getValue() : newValue) + "\t" + bytes.get(bytes.size() - 1) + "\t" + time.get(bytes.size() - 1) + "\n";
+					string += entry.getKey() + "\t" +
+							(newValue == null ? entry.getValue() : newValue) +
+							"\t" + bytes.get(bytes.size() - 1) + "\t" +
+							time.get(bytes.size() - 1) + "\n";
 
 					try{
 						writer.write(string);
@@ -145,8 +148,7 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 
 				}
 
-
-				//Waits for 1 minute before stopping
+				// Waits for 1 minute before stopping
 				if(totalTime > 60000){
 					break;
 				}
@@ -180,20 +182,20 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 		if(!silent){
 			System.out.println();
 			System.out.println("Done processing!");
-			System.out.println("Amount of total websites: "+ success + " out of " + counter);
-			System.out.println("Amount of websites switching to https://: "+failedAttempts);
+			System.out.println("Amount of total websites: " + success +
+					" out of " + counter);
+			System.out.println("Amount of websites switching to https://: " +
+					failedAttempts);
 			System.out.println("Total Bytes: " + totalBytes);
 			System.out.println("Total Time (ms): " + totalTime);
-			System.out.println("Average Speed (KB/s): " + (double) totalBytes / (double) totalTime);
-			/*for(int i = 0; i<bytes.size();i++){
-				System.out.println(i);
-				System.out.println(bytes.get(i));
-				System.out.println(time.get(i));
-				System.out.println();
-			}*/
+			System.out.println("Average Speed (KB/s): " + (double) totalBytes /
+					(double) totalTime);
+			/*
+			 * for(int i = 0; i<bytes.size();i++){ System.out.println(i);
+			 * System.out.println(bytes.get(i));
+			 * System.out.println(time.get(i)); System.out.println(); }
+			 */
 		}
-
-
 
 	}
 
@@ -222,7 +224,8 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			URL url = new URL(website);
 			HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>> set = new HashSet<InfoSender<Pair<Pair<Long, Long>, Integer>>>();
 			set.add(this);
-			Pair<Long, Long> total =  WebConnector.webpageByteCount(url, silent, gui, set, attemptCount, timer);
+			Pair<Long, Long> total = WebConnector.webpageByteCount(url, silent,
+					gui, set, attemptCount, timer);
 			synchronized(this){
 				totalBytes += total.getValueOne();
 				totalTime += total.getValueTwo();
@@ -232,7 +235,8 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 				return false;
 			}
 			if(gui != null){
-				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(), total.getValueTwo(), numSites());
+				gui.graphWindow.sitePanel.pushBar(name, total.getValueOne(),
+						total.getValueTwo());
 				if(!silent){
 					System.out.println(name);
 				}
@@ -240,7 +244,9 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			if(!silent){
 				System.out.println("Bytes: " + total.getValueOne());
 				System.out.println("Time (ms): " + total.getValueTwo());
-				System.out.println("Speed (KB/s): " + (double) total.getValueOne() / (double) total.getValueTwo());
+				System.out.println("Speed (KB/s): " +
+						(double) total.getValueOne() /
+						(double) total.getValueTwo());
 
 			}
 			bytes.add(total.getValueOne());
@@ -274,20 +280,22 @@ public class WebProcessor implements InfoSender<Pair<Pair<Long, Long>, Integer>>
 			bytes = totalBytes + info.getValueOne();
 			time = totalTime + info.getValueTwo();
 		}
-		gui.website.setText(currentName + "  ("+ counter +"/"+data.size()+")");
+		gui.website.setText(currentName + "  (" + counter + "/" + data.size() +
+				")");
 		gui.kb.setText(String.valueOf(bytes / 1000));
 		gui.time.setText(String.valueOf(time / 1000.0));
 		double speed = (double) bytes / (double) time;
-		gui.cumulativeSpeed.setText(String.valueOf(MathHelper.roundThreeDecimals(speed)));
+		gui.cumulativeSpeed.setText(String.valueOf(MathHelper
+				.roundThreeDecimals(speed)));
 
 		if(gui != null){
-			gui.graphWindow.timePanel.pushLine(System.currentTimeMillis(), speed);
+			gui.graphWindow.timePanel.pushLine(System.currentTimeMillis(),
+					speed);
 		}
 		if(timer != null){
 			timer.send(new Pair<Long, Long>(bytes, time));
 		}
 	}
-
 
 	public int numSites(){
 		return data.size();

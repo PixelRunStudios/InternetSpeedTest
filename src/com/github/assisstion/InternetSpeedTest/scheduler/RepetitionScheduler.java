@@ -10,10 +10,12 @@ public class RepetitionScheduler implements Runnable{
 	protected LifeLine line;
 
 	public static void main(String[] args){
-		new Thread(new RepetitionScheduler(-1, 1000, new WebTimedProcess(), null)).start();
+		new Thread(new RepetitionScheduler(-1, 1000, new WebTimedProcess(),
+				null)).start();
 	}
 
-	public RepetitionScheduler(long iterations, long delay, Runnable runnable, LifeLine line){
+	public RepetitionScheduler(long iterations, long delay, Runnable runnable,
+			LifeLine line){
 		this.delay = delay;
 		this.runnable = runnable;
 		this.iterations = iterations;

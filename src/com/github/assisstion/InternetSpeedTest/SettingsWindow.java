@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
 import com.github.assisstion.InternetSpeedTest.helper.FileHelper;
@@ -23,8 +24,8 @@ public class SettingsWindow extends JFrame{
 	private static final long serialVersionUID = 6226471022209066412L;
 	private JPanel contentPane;
 
-	public static final String FILE_LOCATION = "resources" +
-			File.separator + "websites.txt";
+	public static final String FILE_LOCATION = "resources" + File.separator +
+			"websites.txt";
 	public static final String DEFAULT_FILE_LOCATION = "resources" +
 			File.separator + "defWebsites.txt";
 
@@ -33,7 +34,7 @@ public class SettingsWindow extends JFrame{
 	 */
 	public SettingsWindow(){
 		setTitle("Settings");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 360, 520);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,9 +51,9 @@ public class SettingsWindow extends JFrame{
 		textPane.setText(load(new File(FILE_LOCATION)));
 
 		JButton btnOpen = new JButton("Load");
-		btnOpen.addActionListener(new ActionListener() {
+		btnOpen.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				textPane.setText(load(new File(FILE_LOCATION)));
 
 			}
@@ -62,20 +63,21 @@ public class SettingsWindow extends JFrame{
 
 		JButton btnSave = new JButton("Save");
 		btnSave.setBounds(202, 18, 62, 29);
-		btnSave.addActionListener(new ActionListener() {
+		btnSave.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e){
 				String out = textPane.getText();
-				save(new File(FILE_LOCATION),out);
+				save(new File(FILE_LOCATION), out);
 			}
 		});
 		contentPane.add(btnSave);
 
 		JButton btnReset = new JButton("Reset");
-		btnReset.addActionListener(new ActionListener() {
+		btnReset.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				save(new File(FILE_LOCATION),load(new File(DEFAULT_FILE_LOCATION)));
+			public void actionPerformed(ActionEvent e){
+				save(new File(FILE_LOCATION), load(new File(
+						DEFAULT_FILE_LOCATION)));
 				textPane.setText(load(new File(FILE_LOCATION)));
 			}
 		});
@@ -87,7 +89,7 @@ public class SettingsWindow extends JFrame{
 		contentPane.add(lblNewLabel);
 	}
 
-	public String load(File file){
+	public static String load(File file){
 		String in;
 		try{
 			in = FileHelper.read(file);
@@ -101,10 +103,10 @@ public class SettingsWindow extends JFrame{
 		return null;
 	}
 
-	public void save(File file, String out){
+	public static void save(File file, String out){
 		file = new File(FILE_LOCATION);
 		try{
-			FileHelper.write(file,out);
+			FileHelper.write(file, out);
 		}
 		catch(IOException e1){
 			// TODO Auto-generated catch block

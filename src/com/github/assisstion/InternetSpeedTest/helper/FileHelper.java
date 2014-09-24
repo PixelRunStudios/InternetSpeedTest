@@ -20,7 +20,7 @@ public class FileHelper{
 			}
 		}
 	}
-	
+
 	public static String read(File file) throws IOException{
 		BufferedReader reader = null;
 		try{
