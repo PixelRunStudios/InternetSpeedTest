@@ -4,10 +4,19 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -15,6 +24,10 @@ import com.github.assisstion.InternetSpeedTest.scheduler.RepetitionScheduler;
 import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 
 public class MainGUI extends JFrame{
+
+	public static final String DATA_DIR = "data";
+	public static final String LOG_FILE = "data" + File.separator + "output2.txt";
+	public static final String STATE_FILE = "data" + File.separator + "state.dat";
 
 	private static final long serialVersionUID = 8479444564966231741L;
 
@@ -49,8 +62,49 @@ public class MainGUI extends JFrame{
 			@Override
 			public void run(){
 				try{
+
 					MainGUI frame = new MainGUI();
+					frame.addWindowListener(frame.new StateSaver());
 					frame.setVisible(true);
+
+					File file = new File(STATE_FILE);
+					if(file.exists() && file.canRead()){
+						boolean doesLoad;
+						int res = JOptionPane.showConfirmDialog(frame,
+								"Do you want to load the state?", "Loading state",
+								JOptionPane.YES_NO_OPTION);
+						switch(res){
+							case JOptionPane.YES_OPTION:
+								doesLoad = true;
+								break;
+							case JOptionPane.NO_OPTION:
+								doesLoad = false;
+								break;
+							default:
+								doesLoad = false;
+								break;
+						}
+						if(doesLoad){
+							try(ObjectInputStream ois = new ObjectInputStream(
+									new FileInputStream(file))){
+								Object o = ois.readObject();
+								if(o instanceof WebTimedProcess){
+									try{
+										frame.wtp = (WebTimedProcess) o;
+										frame.wtp.gui = frame;
+										frame.wtp.setPaused(true);
+										frame.started = true;
+										new Thread(new RepetitionScheduler(
+												-1, 1000, frame.wtp, frame.wtp)).start();
+									}
+									catch(Exception e){
+										e.printStackTrace();
+										frame.clear();
+									}
+								}
+							}
+						}
+					}
 				}
 				catch(Exception e){
 					e.printStackTrace();
@@ -68,7 +122,7 @@ public class MainGUI extends JFrame{
 		helpWindow = new HelpWindow();
 		settingsWindow = new SettingsWindow();
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 173);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -329,5 +383,46 @@ public class MainGUI extends JFrame{
 		allKB.setText("N/A");
 		timePassed.setText("N/A");
 		started = false;
+	}
+
+	protected class StateSaver extends WindowAdapter{
+
+
+
+		@Override
+		public void windowClosed(WindowEvent ev){
+			System.out.println("Starting shutdown...");
+			if(started && wtp != null){
+				boolean doesSave;
+				int res = JOptionPane.showConfirmDialog(MainGUI.this,
+						"Do you want to save the state?", "Saving state",
+						JOptionPane.YES_NO_OPTION);
+				switch(res){
+					case JOptionPane.YES_OPTION:
+						doesSave = true;
+						break;
+					case JOptionPane.NO_OPTION:
+						doesSave = false;
+						break;
+					default:
+						doesSave = false;
+						break;
+				}
+				if(doesSave){
+					System.out.println("Saving state...");
+
+					File file = new File(STATE_FILE);
+					try(ObjectOutputStream oos = new ObjectOutputStream(
+							new FileOutputStream(file))){
+						oos.writeObject(wtp);
+					}
+					catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+			}
+			System.out.println("System Exit!");
+			System.exit(0);
+		}
 	}
 }

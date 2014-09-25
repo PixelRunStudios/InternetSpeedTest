@@ -5,7 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
@@ -26,12 +29,16 @@ LifeLine{
 	protected transient WebProcessor processor;
 
 	public transient MainGUI gui;
-	public TreeMap<Long, Double> timeMap = new TreeMap<Long, Double>();
-	public TreeMap<Long, Double> runMap = new TreeMap<Long, Double>();
-	public LinkedHashMap<String, Pair<Long, Long>> siteMap =
+	public NavigableMap<Long, Double> timeMap = new TreeMap<Long, Double>();
+	public NavigableMap<Long, Double> runMap = new TreeMap<Long, Double>();
+	public Map<String, Pair<Long, Long>> siteMap =
 			new LinkedHashMap<String, Pair<Long, Long>>();
 
+	public ArrayList<Long> ends = new ArrayList<Long>();
+
 	protected boolean lastRunZero = false;
+
+	protected transient long lastRun = Long.MIN_VALUE;
 
 	protected int run = 0;
 	protected long startTime = 0;
@@ -39,8 +46,8 @@ LifeLine{
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
 
-	private File dir = new File("data");
-	private File file = new File("data/output2.txt");
+	private File dir = new File(MainGUI.DATA_DIR);
+	private File file = new File(MainGUI.LOG_FILE);
 
 	protected transient boolean paused = false;
 	protected long pausedTime;
@@ -88,7 +95,7 @@ LifeLine{
 		}
 		if(gui != null){
 			gui.graphWindow.timePanel.runEnd();
-
+			lastRun = System.currentTimeMillis();
 		}
 		long time = processor.getTotalTime();
 		long bytes = processor.getTotalBytes();
@@ -175,6 +182,22 @@ LifeLine{
 
 	public boolean siteRunning(){
 		return processor.siteRunning();
+	}
+
+	protected Object writeReplace() throws ObjectStreamException{
+		if(lastRun == Long.MIN_VALUE){
+			timeMap = new TreeMap<Long, Double>();
+			runMap = new TreeMap<Long, Double>();
+		}
+		else{
+			TreeMap<Long, Double> newMap = new TreeMap<Long, Double>();
+			newMap.putAll(timeMap.headMap(lastRun, false));;
+			timeMap = newMap;
+			TreeMap<Long, Double> newMap2 = new TreeMap<Long, Double>();
+			newMap2.putAll(runMap.headMap(lastRun, false));;
+			runMap = newMap2;
+		}
+		return this;
 	}
 
 	protected Object readResolve() throws ObjectStreamException{

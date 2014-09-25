@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.swing.JLabel;
@@ -27,12 +26,12 @@ public class BarGraphPanel extends JPanel{
 
 	private long max = 0;
 	private static final int CAP = 200;
-	protected MapHolder<String, Pair<Long, Long>, LinkedHashMap<String, Pair<Long, Long>>> holder;
+	protected MapHolder<String, Pair<Long, Long>, Map<String, Pair<Long, Long>>> holder;
 
 	/**
 	 * Create the panel.
 	 */
-	public BarGraphPanel(MapHolder<String, Pair<Long, Long>, LinkedHashMap<String, Pair<Long, Long>>> holder){
+	public BarGraphPanel(MapHolder<String, Pair<Long, Long>, Map<String, Pair<Long, Long>>> holder){
 		this.holder = holder;
 		setLayout(null);
 
@@ -42,11 +41,11 @@ public class BarGraphPanel extends JPanel{
 
 	}
 
-	public void setHolder(MapHolder<String, Pair<Long, Long>, LinkedHashMap<String, Pair<Long, Long>>> holder){
+	public void setHolder(MapHolder<String, Pair<Long, Long>, Map<String, Pair<Long, Long>>> holder){
 		this.holder = holder;
 	}
 
-	public MapHolder<String, Pair<Long, Long>, LinkedHashMap<String, Pair<Long, Long>>> getHolder(){
+	public MapHolder<String, Pair<Long, Long>, Map<String, Pair<Long, Long>>> getHolder(){
 		return holder;
 	}
 

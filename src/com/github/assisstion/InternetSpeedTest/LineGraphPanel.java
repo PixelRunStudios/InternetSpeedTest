@@ -5,8 +5,9 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.NavigableMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -42,15 +43,18 @@ public class LineGraphPanel extends JPanel{
 	private static final int MARKER_LENGTH = 10;
 	private static final int ADDITION = 2;
 
-	private ArrayList<Long> ends = new ArrayList<Long>();
 	private JCheckBox chckbxHideRunLines;
 
-	protected MapHolder<Long, Double, TreeMap<Long, Double>> holder;
+	protected ListHolder<Long, List<Long>> listHolder;
+
+	protected MapHolder<Long, Double, NavigableMap<Long, Double>> holder;
 
 	/**
 	 * Create the panel.
 	 */
-	public LineGraphPanel(MapHolder<Long, Double, TreeMap<Long, Double>> holder, boolean hasHideRunLines){
+	public LineGraphPanel(MapHolder<Long, Double, NavigableMap<Long, Double>> holder,
+			ListHolder<Long, List<Long>> listHolder, boolean hasHideRunLines){
+		this.listHolder = listHolder;
 		this.holder = holder;
 
 		setLayout(null);
@@ -167,10 +171,13 @@ public class LineGraphPanel extends JPanel{
 			speedStackCount++;
 			if(speedStackCount >= valuesPerPoint){
 				boolean end = false;
-				if(ends.size() > index &&
-						ends.get(ends.size() - index - 1) > entry.getKey()){
-					index++;
-					end = true;
+				if(listHolder != null){
+					if(listHolder.getList().size() > index &&
+							listHolder.getList().get(listHolder.getList().size()
+									- index - 1) > entry.getKey()){
+						index++;
+						end = true;
+					}
 				}
 				double speed = (double) speedStack / (double) speedStackCount;
 				if(speed > max){
@@ -254,7 +261,9 @@ public class LineGraphPanel extends JPanel{
 	}
 
 	public void runEnd(){
-		ends.add(System.currentTimeMillis());
+		if(listHolder != null){
+			listHolder.getList().add(System.currentTimeMillis());
+		}
 		repaint();
 	}
 

@@ -2,7 +2,11 @@ package com.github.assisstion.InternetSpeedTest;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableMap;
 import java.util.TreeMap;
 
 import javax.swing.JFrame;
@@ -39,9 +43,9 @@ public class GraphWindow extends JFrame{
 	}
 
 	public void reset(){
-		timePanel = new LineGraphPanel(new TimeHolder(), true);
+		timePanel = new LineGraphPanel(new TimeHolder(), new TimeListHolder(), true);
 		sitePanel = new BarGraphPanel(new SiteHolder());
-		runPanel = new LineGraphPanel(new TimeHolder(), false);
+		runPanel = new LineGraphPanel(new RunHolder(), null, false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -70,10 +74,10 @@ public class GraphWindow extends JFrame{
 		});
 	}
 
-	public class TimeHolder implements MapHolder<Long, Double, TreeMap<Long, Double>>{
+	public class TimeHolder implements MapHolder<Long, Double, NavigableMap<Long, Double>>{
 
 		@Override
-		public TreeMap<Long, Double> getMap(){
+		public NavigableMap<Long, Double> getMap(){
 			if(gui.getProcess() == null){
 				return new TreeMap<Long, Double>();
 			}
@@ -83,10 +87,10 @@ public class GraphWindow extends JFrame{
 	}
 
 	public class SiteHolder implements MapHolder<String, Pair<Long, Long>,
-	LinkedHashMap<String, Pair<Long, Long>>>{
+	Map<String, Pair<Long, Long>>>{
 
 		@Override
-		public LinkedHashMap<String, Pair<Long, Long>> getMap(){
+		public Map<String, Pair<Long, Long>> getMap(){
 			if(gui.getProcess() == null){
 				return new LinkedHashMap<String, Pair<Long, Long>>();
 			}
@@ -95,14 +99,26 @@ public class GraphWindow extends JFrame{
 
 	}
 
-	public class RuneHolder implements MapHolder<Long, Double, TreeMap<Long, Double>>{
+	public class RunHolder implements MapHolder<Long, Double, NavigableMap<Long, Double>>{
 
 		@Override
-		public TreeMap<Long, Double> getMap(){
+		public NavigableMap<Long, Double> getMap(){
 			if(gui.getProcess() == null){
 				return new TreeMap<Long, Double>();
 			}
 			return gui.getProcess().runMap;
+		}
+
+	}
+
+	public class TimeListHolder implements ListHolder<Long, List<Long>>{
+
+		@Override
+		public List<Long> getList(){
+			if(gui.getProcess() == null){
+				return new ArrayList<Long>();
+			}
+			return gui.getProcess().ends;
 		}
 
 	}
