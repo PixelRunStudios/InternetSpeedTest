@@ -3,6 +3,10 @@ package com.github.assisstion.InternetSpeedTest.scheduler;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 
@@ -14,12 +18,18 @@ import com.github.assisstion.InternetSpeedTest.web.InfoSender;
 import com.github.assisstion.InternetSpeedTest.web.WebProcessor;
 import com.github.assisstion.Shared.Pair;
 
-public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>,
-		LifeLine{
+public class WebTimedProcess implements Serializable, Runnable, InfoSender<Pair<Long, Long>>,
+LifeLine{
 
-	protected WebProcessor processor;
+	private static final long serialVersionUID = 1172604926908021885L;
 
-	public MainGUI gui;
+	protected transient WebProcessor processor;
+
+	public transient MainGUI gui;
+	public TreeMap<Long, Double> timeMap = new TreeMap<Long, Double>();
+	public TreeMap<Long, Double> runMap = new TreeMap<Long, Double>();
+	public LinkedHashMap<String, Pair<Long, Long>> siteMap =
+			new LinkedHashMap<String, Pair<Long, Long>>();
 
 	protected boolean lastRunZero = false;
 
@@ -32,43 +42,14 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>,
 	private File dir = new File("data");
 	private File file = new File("data/output2.txt");
 
-	protected boolean paused = false;
+	protected transient boolean paused = false;
 	protected long pausedTime;
-	protected long pauseStart;
+	protected transient long pauseStart;
 	protected boolean alive = true;
 
 	public WebTimedProcess(){
 		startTime = System.currentTimeMillis();
-		try{
-			processor = new WebProcessor();
-		}
-		catch(RuntimeException e){
-			JOptionPane.showOptionDialog(gui, "Invalid Websites File",
-					"Error!", JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.ERROR_MESSAGE, null, null, null);
-			throw e;
-		}
-		processor.silent = true;
-		try{
-			dir.mkdir();
-			file.createNewFile();
-		}
-		catch(IOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		new Thread(new RepetitionScheduler(-1, 100, new Runnable(){
-
-			@Override
-			public void run(){
-				if(gui != null && paused == false){
-					gui.timePassed.setText(String.valueOf(TimeHelper
-							.formatSeconds((System.currentTimeMillis() -
-									startTime - pausedTime) / 100 / 10.0)));
-				}
-			}
-
-		}, this)).start();
+		setup();
 	}
 
 	@Override
@@ -194,5 +175,43 @@ public class WebTimedProcess implements Runnable, InfoSender<Pair<Long, Long>>,
 
 	public boolean siteRunning(){
 		return processor.siteRunning();
+	}
+
+	protected Object readResolve() throws ObjectStreamException{
+		setup();
+		return this;
+	}
+
+	protected void setup(){
+		try{
+			processor = new WebProcessor();
+		}
+		catch(RuntimeException e){
+			JOptionPane.showOptionDialog(gui, "Invalid Websites File",
+					"Error!", JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.ERROR_MESSAGE, null, null, null);
+			throw e;
+		}
+		processor.silent = true;
+		try{
+			dir.mkdir();
+			file.createNewFile();
+		}
+		catch(IOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new Thread(new RepetitionScheduler(-1, 100, new Runnable(){
+
+			@Override
+			public void run(){
+				if(gui != null && paused == false){
+					gui.timePassed.setText(String.valueOf(TimeHelper
+							.formatSeconds((System.currentTimeMillis() -
+									startTime - pausedTime) / 100 / 10.0)));
+				}
+			}
+
+		}, this)).start();
 	}
 }

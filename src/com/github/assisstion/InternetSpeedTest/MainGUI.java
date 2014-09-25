@@ -64,7 +64,7 @@ public class MainGUI extends JFrame{
 	 */
 	public MainGUI(){
 		setTitle("Internet Speedester");
-		graphWindow = new GraphWindow();
+		graphWindow = new GraphWindow(this);
 		helpWindow = new HelpWindow();
 		settingsWindow = new SettingsWindow();
 
@@ -157,7 +157,7 @@ public class MainGUI extends JFrame{
 
 		JLabel lblCumulativeRunSpeed = new JLabel("Cumulative Run Speed:");
 		lblCumulativeRunSpeed
-				.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
+		.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
 		lblCumulativeRunSpeed.setBounds(16, 117, 151, 16);
 		contentPane.add(lblCumulativeRunSpeed);
 
@@ -284,7 +284,7 @@ public class MainGUI extends JFrame{
 					wtp.gui = MainGUI.this;
 					wtp.setPaused(false);
 					new Thread(new RepetitionScheduler(-1, 1000, wtp, wtp))
-							.start();
+					.start();
 
 					/*
 					 * WebProcessor wp = new
@@ -308,10 +308,14 @@ public class MainGUI extends JFrame{
 		}
 	}
 
+	public WebTimedProcess getProcess(){
+		return wtp;
+	}
+
 	protected void clear(){
 		wtp.clear();
 		graphWindow.setVisible(false);
-		graphWindow = new GraphWindow();
+		graphWindow = new GraphWindow(this);
 		website.setText("N/A");
 		speed.setText("N/A");
 		cumulativeSpeed.setText("N/A");

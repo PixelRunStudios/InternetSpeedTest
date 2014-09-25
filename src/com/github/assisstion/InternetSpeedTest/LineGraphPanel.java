@@ -28,7 +28,6 @@ public class LineGraphPanel extends JPanel{
 	private static final int LEFT_X = 50;
 	private static final int RIGHT_X = 920;
 
-	private TreeMap<Long, Double> data = new TreeMap<Long, Double>();
 	private int valuesPerPoint = 1;
 	private int pixelInterval = 2;
 	// private int max = 0;
@@ -46,10 +45,14 @@ public class LineGraphPanel extends JPanel{
 	private ArrayList<Long> ends = new ArrayList<Long>();
 	private JCheckBox chckbxHideRunLines;
 
+	protected MapHolder<Long, Double, TreeMap<Long, Double>> holder;
+
 	/**
 	 * Create the panel.
 	 */
-	public LineGraphPanel(boolean hasHideRunLines){
+	public LineGraphPanel(MapHolder<Long, Double, TreeMap<Long, Double>> holder, boolean hasHideRunLines){
+		this.holder = holder;
+
 		setLayout(null);
 
 		JButton btnSetValue = new JButton("Set Point Interval");
@@ -112,6 +115,7 @@ public class LineGraphPanel extends JPanel{
 		add(btnUseAutomove);
 
 		chckbxHideRunLines = new JCheckBox("Hide Run Lines");
+		chckbxHideRunLines.addActionListener(e -> repaint());
 		chckbxHideRunLines.setBounds(260, 1, 128, 23);
 		if(hasHideRunLines){
 			add(chckbxHideRunLines);
@@ -121,10 +125,10 @@ public class LineGraphPanel extends JPanel{
 	@Override
 	public void paint(Graphics g){
 		super.paint(g);
-		if(data.size() > 0){
+		if(holder.getMap().size() > 0){
 			g.drawString(
 					"Last Update: " +
-							TimeHelper.formatSystemTimeCompact(data.lastEntry()
+							TimeHelper.formatSystemTimeCompact(holder.getMap().lastEntry()
 									.getKey()), LEFT_X + 10, TOP_Y + 20);
 		}
 		g.setColor(Color.BLACK);
@@ -132,26 +136,26 @@ public class LineGraphPanel extends JPanel{
 		int size = getGraphWidth() / pixelInterval * valuesPerPoint;
 		ArrayList<Pair<Double, Boolean>> points = new ArrayList<Pair<Double, Boolean>>(
 				size / valuesPerPoint);
-		Map.Entry<Long, Double> entry = data.lastEntry();
+		Map.Entry<Long, Double> entry = holder.getMap().lastEntry();
 		int speedStack = 0;
 		int speedStackCount = 0;
 		int moveAmount = 0;
 		if(!automove){
-			moveAmount += data.size() - (movePosition + getGraphWidth()) /
+			moveAmount += holder.getMap().size() - (movePosition + getGraphWidth()) /
 					pixelInterval * valuesPerPoint;
 			// moveAmount += movePosition;
 		}
-		moveAmount = moveAmount - moveAmount % valuesPerPoint + data.size() %
+		moveAmount = moveAmount - moveAmount % valuesPerPoint + holder.getMap().size() %
 				valuesPerPoint;
 		if(moveAmount < 0){
-			moveAmount = data.size() % valuesPerPoint;
+			moveAmount = holder.getMap().size() % valuesPerPoint;
 		}
 		// System.out.println(moveAmount);
 		for(int i = 0; i < moveAmount; i++){
 			if(entry == null){
 				break;
 			}
-			entry = data.lowerEntry(entry.getKey());
+			entry = holder.getMap().lowerEntry(entry.getKey());
 		}
 		int index = 0;
 		int max = 0;
@@ -176,7 +180,7 @@ public class LineGraphPanel extends JPanel{
 				speedStack = 0;
 				speedStackCount = 0;
 			}
-			entry = data.lowerEntry(entry.getKey());
+			entry = holder.getMap().lowerEntry(entry.getKey());
 		}
 		boolean hasLast = false;
 		int lastX = LEFT_X;
@@ -208,7 +212,7 @@ public class LineGraphPanel extends JPanel{
 		int off = size / LABELS;
 		Map.Entry<Long, Double> entryX;
 		if(entry == null){
-			entryX = data.firstEntry();
+			entryX = holder.getMap().firstEntry();
 		}
 		else{
 			entryX = entry;
@@ -228,7 +232,7 @@ public class LineGraphPanel extends JPanel{
 				if(entryX == null){
 					break out;
 				}
-				entryX = data.higherEntry(entryX.getKey());
+				entryX = holder.getMap().higherEntry(entryX.getKey());
 			}
 		}
 		for(int j = 0; j <= max + CAP; j += markerAmount(max + CAP)){
@@ -245,13 +249,13 @@ public class LineGraphPanel extends JPanel{
 		if(Double.isInfinite(speed)){
 			return;
 		}
-		data.put(timeStamp, speed);
-
+		holder.getMap().put(timeStamp, speed);
 		repaint();
 	}
 
 	public void runEnd(){
 		ends.add(System.currentTimeMillis());
+		repaint();
 	}
 
 	public static int getGraphWidth(){
