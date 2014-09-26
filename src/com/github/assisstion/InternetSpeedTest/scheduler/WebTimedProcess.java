@@ -38,24 +38,24 @@ LifeLine{
 
 	protected boolean lastRunZero = false;
 
-	protected transient long lastRun = Long.MIN_VALUE;
+	protected long lastRun = Long.MIN_VALUE;
 
 	protected int run = 0;
-	protected long startTime = 0;
+	protected long startOffset = 0;
+	protected transient long startTime = 0;
 
 	protected long totalTime = 0;
 	protected long totalBytes = 0;
 
-	private File dir = new File(MainGUI.DATA_DIR);
-	private File file = new File(MainGUI.LOG_FILE);
+	private static transient File dir = new File(MainGUI.DATA_DIR);
+	private static transient File file = new File(MainGUI.LOG_FILE);
 
 	protected transient boolean paused = false;
-	protected long pausedTime;
+	protected transient long pausedTime;
 	protected transient long pauseStart;
 	protected boolean alive = true;
 
 	public WebTimedProcess(){
-		startTime = System.currentTimeMillis();
 		setup();
 	}
 
@@ -197,6 +197,8 @@ LifeLine{
 			newMap2.putAll(runMap.headMap(lastRun, false));;
 			runMap = newMap2;
 		}
+		startOffset += (paused ? pauseStart : System.currentTimeMillis())
+				- startTime - pausedTime;
 		return this;
 	}
 
@@ -206,6 +208,7 @@ LifeLine{
 	}
 
 	protected void setup(){
+		startTime = System.currentTimeMillis();
 		try{
 			processor = new WebProcessor();
 		}
@@ -230,11 +233,16 @@ LifeLine{
 			public void run(){
 				if(gui != null && paused == false){
 					gui.timePassed.setText(String.valueOf(TimeHelper
-							.formatSeconds((System.currentTimeMillis() -
-									startTime - pausedTime) / 100 / 10.0)));
+							.formatSeconds(getTimePassed() / 100 / 10.0)));
 				}
 			}
 
+
 		}, this)).start();
+	}
+
+
+	private long getTimePassed(){
+		return System.currentTimeMillis() - startTime + startOffset - pausedTime;
 	}
 }
