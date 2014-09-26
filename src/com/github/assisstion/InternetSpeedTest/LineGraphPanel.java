@@ -29,6 +29,7 @@ public class LineGraphPanel extends JPanel{
 	private static final int LEFT_X = 50;
 	private static final int RIGHT_X = 920;
 
+	private int avgSize = 1;
 	private int valuesPerPoint = 1;
 	private int pixelInterval = 2;
 	// private int max = 0;
@@ -48,6 +49,7 @@ public class LineGraphPanel extends JPanel{
 	protected ListHolder<Long, List<Long>> listHolder;
 
 	protected MapHolder<Long, Double, NavigableMap<Long, Double>> holder;
+	private JTextField textField_2;
 
 	/**
 	 * Create the panel.
@@ -118,6 +120,27 @@ public class LineGraphPanel extends JPanel{
 		btnUseAutomove.setBounds(796, 0, 130, 29);
 		add(btnUseAutomove);
 
+		textField_2 = new JTextField("0");
+		textField_2.setBounds(420, -1, 30, 28);
+		add(textField_2);
+		textField_2.setColumns(15);
+
+		JButton btnDispAvg = new JButton("Disp. Avg.");
+		btnDispAvg.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try{
+					avgSize = Integer.parseInt(textField_2.getText());
+					repaint();
+				}
+				catch(NumberFormatException nfe){
+					System.out.println("Input not a number!");
+				}
+			}
+		});
+		btnDispAvg.setBounds(450, 0, 90, 29);
+		add(btnDispAvg);
+
 		chckbxHideRunLines = new JCheckBox("Hide Run Lines");
 		chckbxHideRunLines.addActionListener(e -> repaint());
 		chckbxHideRunLines.setBounds(260, 1, 128, 23);
@@ -140,6 +163,8 @@ public class LineGraphPanel extends JPanel{
 		int size = getGraphWidth() / pixelInterval * valuesPerPoint;
 		ArrayList<Pair<Double, Boolean>> points = new ArrayList<Pair<Double, Boolean>>(
 				size / valuesPerPoint);
+		ArrayList<Double> avgPoints = new ArrayList<Double>(
+				size / (valuesPerPoint * avgSize));
 		Map.Entry<Long, Double> entry = holder.getMap().lastEntry();
 		int speedStack = 0;
 		int speedStackCount = 0;
@@ -163,6 +188,8 @@ public class LineGraphPanel extends JPanel{
 		}
 		int index = 0;
 		int max = 0;
+		int avgC = 0;
+		double averageStack = 0;
 		for(int i = 0; i < size; i++){
 			if(entry == null){
 				break;
@@ -184,12 +211,20 @@ public class LineGraphPanel extends JPanel{
 					max = (int) speed;
 				}
 				points.add(new Pair<Double, Boolean>(speed, end));
+				averageStack += speed;
+				avgC++;
+				if(avgSize > 1 && avgC % avgSize == 0){
+					avgPoints.add(averageStack / avgSize);
+					averageStack = 0;
+				}
 				speedStack = 0;
 				speedStackCount = 0;
 			}
 			entry = holder.getMap().lowerEntry(entry.getKey());
 		}
 		boolean hasLast = false;
+		int firstX = LEFT_X;
+		int firstY = BOTTOM_Y;
 		int lastX = LEFT_X;
 		int lastY = BOTTOM_Y;
 		for(int i = 0; i < points.size(); i++){
@@ -209,9 +244,35 @@ public class LineGraphPanel extends JPanel{
 			}
 			lastX = lastX + ADDITION;
 			lastY = y;
+			if(i == 0){
+				firstX = lastX;
+				firstY = lastY;
+			}
 			hasLast = true;
 		}
 
+		boolean hasLastCC = false;
+		int lastXCC = LEFT_X;
+		int lastYCC = BOTTOM_Y;
+		for(int i = 0; i < avgPoints.size(); i++){
+			double valueCC = avgPoints.get(avgPoints.size() - i - 1);
+			int yCC = BOTTOM_Y - (int) (valueCC * getGraphHeight() / (max + CAP));
+			if(hasLastCC){
+				g.setColor(Color.RED);
+				g.drawLine(lastXCC, lastYCC, lastXCC + ADDITION * avgSize, yCC);
+			}
+			lastXCC = lastXCC + ADDITION * avgSize;
+			lastYCC = yCC;
+			if(i == 0){
+				g.setColor(Color.RED);
+				g.drawLine(firstX, firstY, lastXCC, yCC);
+			}
+			hasLastCC = true;
+		}
+		if(avgPoints.size() > 0){
+			g.setColor(Color.RED);
+			g.drawLine(lastXCC, lastYCC, lastX, lastY);
+		}
 		g.setColor(Color.red);
 		g.drawLine(lastX + 2, TOP_Y, lastX + 2, BOTTOM_Y);
 		g.setColor(Color.black);
