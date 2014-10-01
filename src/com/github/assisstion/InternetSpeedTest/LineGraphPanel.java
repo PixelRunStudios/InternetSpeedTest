@@ -131,6 +131,9 @@ public class LineGraphPanel extends JPanel{
 			public void actionPerformed(ActionEvent e) {
 				try{
 					avgSize = Integer.parseInt(textField_2.getText());
+					if(avgSize <= 0){
+						avgSize = 1;
+					}
 					repaint();
 				}
 				catch(NumberFormatException nfe){
