@@ -145,7 +145,14 @@ public class LineGraphPanel extends JPanel{
 		add(btnDispAvg);
 
 		chckbxHideRunLines = new JCheckBox("Hide Run Lines");
-		chckbxHideRunLines.addActionListener(e -> repaint());
+		chckbxHideRunLines.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0){
+				repaint();
+			}
+
+		});
 		chckbxHideRunLines.setBounds(260, 1, 128, 23);
 		if(hasHideRunLines){
 			add(chckbxHideRunLines);
@@ -346,7 +353,7 @@ public class LineGraphPanel extends JPanel{
 
 		@Override
 		public int compareTo(Point o){
-			return Integer.compare(x, o.x);
+			return new Integer(x).compareTo(o.x);
 		}
 	}
 
