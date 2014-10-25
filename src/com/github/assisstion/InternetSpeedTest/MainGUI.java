@@ -85,8 +85,10 @@ public class MainGUI extends JFrame{
 								break;
 						}
 						if(doesLoad){
-							try(ObjectInputStream ois = new ObjectInputStream(
-									new FileInputStream(file))){
+							ObjectInputStream ois = null;
+							try{
+								ois = new ObjectInputStream(
+										new FileInputStream(file));
 								Object o = ois.readObject();
 								if(o instanceof WebTimedProcess){
 									try{
@@ -101,6 +103,11 @@ public class MainGUI extends JFrame{
 										e.printStackTrace();
 										frame.clear();
 									}
+								}
+							}
+							finally{
+								if(ois != null){
+									ois.close();
 								}
 							}
 						}
@@ -412,12 +419,25 @@ public class MainGUI extends JFrame{
 					System.out.println("Saving state...");
 
 					File file = new File(STATE_FILE);
-					try(ObjectOutputStream oos = new ObjectOutputStream(
-							new FileOutputStream(file))){
+					ObjectOutputStream oos = null;
+					try{
+						oos = new ObjectOutputStream(
+								new FileOutputStream(file));
 						oos.writeObject(wtp);
 					}
 					catch(IOException e){
 						e.printStackTrace();
+					}
+					finally{
+						if(oos != null){
+							try{
+								oos.close();
+							}
+							catch(IOException e){
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 			}

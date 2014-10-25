@@ -18,7 +18,7 @@ public class WebConnector{
 
 	/**
 	 * Gets the HTML representation of a webpage as a String
-	 * 
+	 *
 	 * @param url
 	 *            the URL of the webpage
 	 * @return the HTML representation of the webpate
@@ -45,7 +45,7 @@ public class WebConnector{
 
 	/**
 	 * Gets the number of bytes of a webpage
-	 * 
+	 *
 	 * @param url
 	 *            the URL of the webpage
 	 * @param silent
@@ -71,7 +71,7 @@ public class WebConnector{
 	}
 
 	public static class WebpageByteCount extends
-			SwingWorker<Pair<Long, Long>, Pair<Long, Long>>{
+	SwingWorker<Pair<Long, Long>, Pair<Long, Long>>{
 
 		protected int attemptCount;
 		protected URL url;
@@ -97,6 +97,7 @@ public class WebConnector{
 			line = lifeLine;
 		}
 
+		@SuppressWarnings("unchecked")
 		@Override
 		protected Pair<Long, Long> doInBackground() throws Exception{
 			// Gets the input stream to load the website: timeout 5 seconds
@@ -158,7 +159,7 @@ public class WebConnector{
 
 	/**
 	 * Read a byte of data from the input stream with a certain time limit
-	 * 
+	 *
 	 * @param is
 	 * @param timeOut
 	 * @return

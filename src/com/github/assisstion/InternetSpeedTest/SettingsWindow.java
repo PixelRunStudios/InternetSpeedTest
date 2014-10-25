@@ -45,7 +45,7 @@ public class SettingsWindow extends JFrame{
 		scrollPane.setBounds(25, 70, 301, 400);
 		contentPane.add(scrollPane);
 
-		JTextPane textPane = new JTextPane();
+		final JTextPane textPane = new JTextPane();
 		scrollPane.setViewportView(textPane);
 
 		textPane.setText(load(new File(FILE_LOCATION)));
