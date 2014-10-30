@@ -19,7 +19,7 @@ import com.github.assisstion.InternetSpeedTest.scheduler.WebTimedProcess;
 import com.github.assisstion.Shared.Pair;
 
 public class WebProcessor implements
-		InfoSender<Pair<Pair<Long, Long>, Integer>>{
+InfoSender<Pair<Pair<Long, Long>, Integer>>{
 
 	protected Map<String, String> data;
 
@@ -280,15 +280,16 @@ public class WebProcessor implements
 			bytes = totalBytes + info.getValueOne();
 			time = totalTime + info.getValueTwo();
 		}
-		gui.website.setText(currentName + "  (" + counter + "/" + data.size() +
-				")");
-		gui.kb.setText(String.valueOf(bytes / 1000));
-		gui.time.setText(String.valueOf(time / 1000.0));
-		double speed = (double) bytes / (double) time;
-		gui.cumulativeSpeed.setText(String.valueOf(MathHelper
-				.roundThreeDecimals(speed)));
-
 		if(gui != null){
+			gui.website.setText(currentName + "  (" + counter + "/" + data.size() +
+					")");
+			gui.kb.setText(String.valueOf(bytes / 1000));
+			gui.time.setText(String.valueOf(time / 1000.0));
+			double speed = (double) bytes / (double) time;
+			gui.cumulativeSpeed.setText(String.valueOf(MathHelper
+					.roundThreeDecimals(speed)));
+
+
 			gui.graphWindow.timePanel.pushLine(System.currentTimeMillis(),
 					speed);
 		}
